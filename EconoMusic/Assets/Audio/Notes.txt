@@ -1,0 +1,3 @@
+Full Chromatic Scale, with all three note values (half note, quarter notes, eighth notes), for one instrument
+
+instrument_H_01_C4
