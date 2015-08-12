@@ -1,0 +1,9 @@
+This took about 1.5 hrs
+36 notes x 3 note values= 108 files
+
+1.5*60=90 mins
+
+90 mins/108 files = .83 mins per file=~50 secs per file
+
+times include setting up sibelius files
+ 
