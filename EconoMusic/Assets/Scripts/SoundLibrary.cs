@@ -8,18 +8,16 @@ public class SoundLibrary : MonoBehaviour {
 
 	//Lists of each of the notes for vibraphone that gets placed in the nested List.
 	public List<AudioClip> vibraphoneE = new List<AudioClip>();
-	public List<AudioClip> vibraphoneH = new List<AudioClip>();
 	public List<AudioClip> vibraphoneQ = new List<AudioClip>();
+	public List<AudioClip> vibraphoneH = new List<AudioClip>();
 	//Nested list for vibraphone that contains all of the notes.
 	public List<List<AudioClip>> vibraphone = new List<List<AudioClip>>();
 	
 	void Awake () {
 		//Fills the nested Array with its component parts.
-		for (int i = 0; i < 36; i++) {
-			vibraphone.Add (vibraphoneE);
-			vibraphone.Add (vibraphoneH);
-			vibraphone.Add (vibraphoneQ);
-		}
+		vibraphone.Add (vibraphoneE);
+		vibraphone.Add (vibraphoneQ);
+		vibraphone.Add (vibraphoneH);
 	}
 
 	//This function returns the List of sound files you're looking for by inputting the instrument enum.
