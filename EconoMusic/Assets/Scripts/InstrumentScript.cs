@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class InstrumentScript : MonoBehaviour {
 
 	private AudioSource audioSource;
 
-	public AudioClip[] InstrumentEigthNotes;
-	public AudioClip[] InstrumentQuarterNotes;
-	public AudioClip[] InstrumentHalfNotes;
+	public List<AudioClip> InstrumentEigthNotes;
+	public List<AudioClip> InstrumentQuarterNotes;
+	public List<AudioClip> InstrumentHalfNotes;
 
 	public float volume;
 
@@ -16,6 +17,12 @@ public class InstrumentScript : MonoBehaviour {
 
 	public float noteValue = 0.5f;
 	private bool playedNoteRecently = false;
+
+	public Slider TempoSlider;
+	public Slider VolumeSlider;
+
+	public bool loop = false;
+	public bool play = false;
 
 	// Use this for initialization
 	void Start () {
@@ -29,33 +36,48 @@ public class InstrumentScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		noteValue = TempoSlider.value;
+		volume = VolumeSlider.value;
+		
 		if (currentNote < Notes.Count) {
 			PlayMusic ();
-		}
-	}
+		}//if
+		if (currentNote == Notes.Count && loop) {
+			currentNote = 0;
+		}//if
+
+	}//Update
 
 	/// <summary>
 	/// Plays the music.
 	/// </summary>
 	void PlayMusic ()
 	{
-		if ((Time.time % noteValue) < 0.1f && !playedNoteRecently)//if a turn's length has passed
+		if ((Time.time % noteValue) < 0.05f && !playedNoteRecently)//if a turn's length has passed
 		{
-			float pitchThreshold = Mathf.Pow (InstrumentQuarterNotes.Length, -1);
+			float pitchThreshold = Mathf.Pow (InstrumentQuarterNotes.Count, -1);
 			int currentPitch = 0;
 			while (Notes [currentNote] > pitchThreshold) {
-				pitchThreshold += Mathf.Pow (InstrumentQuarterNotes.Length, -1);
+				pitchThreshold += Mathf.Pow (InstrumentQuarterNotes.Count, -1);
 				currentPitch++;
-			}
-			Debug.Log ("Played note " + currentPitch);
+			}//while
+//			Debug.Log ("Played note " + currentPitch);
 
-			audioSource.PlayOneShot (InstrumentQuarterNotes [currentPitch], volume);
+			if(noteValue < 0.25f){
+				audioSource.PlayOneShot (InstrumentEigthNotes [currentPitch], volume);
+			}//if
+			else if(noteValue < 0.5f){
+				audioSource.PlayOneShot (InstrumentQuarterNotes [currentPitch], volume);
+			}//else if
+			else{
+				audioSource.PlayOneShot (InstrumentHalfNotes [currentPitch], volume);
+			}//else
 
 			playedNoteRecently = true;
 			currentNote++;
-		}
-		if ((Time.time % noteValue) > 0.1f && (Time.time % noteValue) < 1f) {
+		}//if
+		if ((Time.time % noteValue) > 0.05f && (Time.time % noteValue) < 0.1f) {
 			playedNoteRecently = false;
-		}
-	}
-}
+		}//if
+	}//PlayMusic
+}//InstrumentScript
