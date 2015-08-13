@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
@@ -98,5 +98,4 @@ public class InstrumentScript : MonoBehaviour {
 	public void UseTimeSlider(){
 		currentNote = Mathf.RoundToInt(TimeSlider.value);
 	}//UseTimeSlider
-
 }//InstrumentScript
