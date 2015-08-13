@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
@@ -20,6 +20,8 @@ public class InstrumentScript : MonoBehaviour {
 
 	public Slider TempoSlider;
 	public Slider VolumeSlider;
+	public Toggle LoopToggle;
+	public Slider TimeSlider;
 
 	public bool loop = false;
 	public bool play = false;
@@ -32,20 +34,23 @@ public class InstrumentScript : MonoBehaviour {
 		}
 
 		audioSource = this.GetComponent<AudioSource> ();
+
+		TimeSlider.maxValue = Notes.Count - 1;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		noteValue = TempoSlider.value;
 		volume = VolumeSlider.value;
-		
-		if (currentNote < Notes.Count) {
+		loop = LoopToggle.isOn;
+
+		if (currentNote < Notes.Count && play) {
 			PlayMusic ();
 		}//if
 		if (currentNote == Notes.Count && loop) {
 			currentNote = 0;
+			TimeSlider.value = 0;
 		}//if
-
 	}//Update
 
 	/// <summary>
@@ -75,9 +80,22 @@ public class InstrumentScript : MonoBehaviour {
 
 			playedNoteRecently = true;
 			currentNote++;
+			TimeSlider.value = currentNote;
 		}//if
 		if ((Time.time % noteValue) > 0.05f && (Time.time % noteValue) < 0.1f) {
 			playedNoteRecently = false;
 		}//if
 	}//PlayMusic
+
+	public void PlayInstument(){
+		play = true;
+	}//PlayInstrument
+
+	public void PauseInstrument(){
+		play = false;
+	}//PauseInstrument
+
+	public void UseTimeSlider(){
+		currentNote = Mathf.RoundToInt(TimeSlider.value);
+	}//UseTimeSlider
 }//InstrumentScript
