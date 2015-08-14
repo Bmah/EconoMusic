@@ -11,6 +11,7 @@ public class InstrumentScript : MonoBehaviour {
 	public List<AudioClip> InstrumentHalfNotes;
 
 	public AudioClip Instrument;
+	int NumberOfNotes = 36;
 
 	public float volume;
 
@@ -38,6 +39,7 @@ public class InstrumentScript : MonoBehaviour {
 		}//for
 
 		audioSource = this.GetComponent<AudioSource> ();
+		audioSource.clip = Instrument;
 
 		TimeSlider.maxValue = Notes.Count - 1;
 
@@ -56,6 +58,11 @@ public class InstrumentScript : MonoBehaviour {
 		if (currentNote < Notes.Count && play) {
 			PlayMusic ();
 		}//if
+
+		if (!play) {
+			audioSource.Stop();
+		}//if
+
 		if (currentNote == Notes.Count && loop) {
 			currentNote = 0;
 			TimeSlider.value = 0;
@@ -69,29 +76,30 @@ public class InstrumentScript : MonoBehaviour {
 	{
 		if ((Time.time % noteValue) < 0.05f && !playedNoteRecently)//if a turn's length has passed
 		{
-			float pitchThreshold = Mathf.Pow (InstrumentQuarterNotes.Count, -1);
+			float pitchThreshold = Mathf.Pow (NumberOfNotes, -1);
 			int currentPitch = 0;
 			while (Notes [currentNote] > pitchThreshold) {
-				pitchThreshold += Mathf.Pow (InstrumentQuarterNotes.Count, -1);
+				pitchThreshold += Mathf.Pow (NumberOfNotes, -1);
 				currentPitch++;
 			}//while
 //			Debug.Log ("Played note " + currentPitch);
 
-			currentNote *= 2;
+			currentPitch *= 2;
 
 			if(noteValue < 0.25f){
-				currentNote += (InstrumentQuarterNotes.Count*2*2);
+				currentPitch += (NumberOfNotes*4);
 				//audioSource.PlayOneShot (InstrumentEigthNotes [currentPitch], volume);
 			}//if
 			else if(noteValue < 0.5f){
-				currentNote += (InstrumentQuarterNotes.Count*2);
+				currentPitch += (NumberOfNotes*2);
 				//audioSource.PlayOneShot (InstrumentQuarterNotes [currentPitch], volume);
 			}//else if
 			else{
 				//audioSource.PlayOneShot (InstrumentHalfNotes [currentPitch], volume);
 			}//else
 
-			audioSource.Play(Instrument);
+			audioSource.time = currentPitch;
+			audioSource.Play();
 
 			playedNoteRecently = true;
 			currentNote++;
