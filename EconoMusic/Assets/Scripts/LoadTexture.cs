@@ -1,6 +1,7 @@
 ﻿//Alex Jungroth
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class LoadTexture : MonoBehaviour{
 
@@ -11,33 +12,35 @@ public class LoadTexture : MonoBehaviour{
 	FileInfo sel;
 	string path = "";
 
-	//holds the file path so textures can be loaded in (AAJ)
+	//Holds the file path so textures can be loaded in (AAJ)
 	string filePath;
 
-	//holds this objects renderer (AAJ)
-	public Renderer rend;
+	//Holds this objects sprite (AAJ)
+	public Sprite loadedSprite;
 
-	void Start(){
-		rend = GetComponent<Renderer> ();
+	//Prevents more than one texture from being loaded on the same object (AAJ)
+	public bool loaded = false;
 
-	}
+	public void OnMouseDown(){
 
-	void OnMouseEnter(){
-
-		if (Input.GetMouseButtonDown(0)){
+		if(loaded == false){
 
 			selected = false;
-			if (!browser.isShowing) browser.Show(path, searchPatterns, this, mode);
+			if(!browser.isShowing){
+
+				browser.Show (path, searchPatterns, this, mode);
+			}
 		}
 	}
 	
-	// the FileBrowser will send a message to this MonoBehaviour when the user selects a file
+	// The FileBrowser will send a message to this MonoBehaviour when the user selects a file
 	// Set the 'SelectEventName' in the inspector to the name of the function you want to receive the message
 	void OnFileSelected(FileInfo info){
-		sel = info;
-
-		//loads in the texture (AAJ)
-		load(sel.path);
+			
+			sel = info;
+			
+			//Loads in the texture (AAJ)
+			load(sel.path);
 	}
 	
 	void OnFileChange(FileInfo file){
@@ -56,9 +59,21 @@ public class LoadTexture : MonoBehaviour{
 	/// <param name="filePath">File path.</param>
 	void load(string filePath){
 
+		//Prevents multiple textures being loaded onto the same object
+		//but only once something has been loaded (AAJ)
+		loaded = true;
+
+		//Gets the sprite from the file path (AAJ)
 		byte[] bytes = System.IO.File.ReadAllBytes(filePath);
 		Texture2D tex = new Texture2D(1, 1);
 		tex.LoadImage(bytes);
-		rend.material.mainTexture = tex;
+
+		//Generates a sprite dynamically (AAJ)
+		Rect rect = new Rect(0, 0, tex.width, tex.height);
+		Vector2 pivot = new Vector2(0.5f, 0.5f);
+		loadedSprite = Sprite.Create(tex, rect, pivot);
+
+		//Loads the new sprite into the object's sprite component (AAJ)
+		GetComponent<Image>().sprite = loadedSprite;
 	}
 }
