@@ -26,17 +26,24 @@ public class InstrumentScript : MonoBehaviour {
 	public bool loop = false;
 	public bool play = false;
 
+	private SoundLibrary soundLibrary;
+
 	// Use this for initialization
 	void Start () {
 		//temporary NoteGenerator
 		for (int i = 0; i < 100; i++) {
 			Notes.Add(Random.value);
-		}
+		}//for
 
 		audioSource = this.GetComponent<AudioSource> ();
 
 		TimeSlider.maxValue = Notes.Count - 1;
-	}
+
+		GameObject temp = GameObject.FindGameObjectWithTag ("SoundLibrary");
+		if (temp != null) {
+			soundLibrary = temp.GetComponent<SoundLibrary> ();
+		}
+	}//Start
 	
 	// Update is called once per frame
 	void Update () {
@@ -87,15 +94,39 @@ public class InstrumentScript : MonoBehaviour {
 		}//if
 	}//PlayMusic
 
+	/// <summary>
+	/// Plays the instument.
+	/// </summary>
 	public void PlayInstument(){
 		play = true;
 	}//PlayInstrument
 
+	/// <summary>
+	/// Pauses the instrument.
+	/// </summary>
 	public void PauseInstrument(){
 		play = false;
 	}//PauseInstrument
 
+	/// <summary>
+	/// Called when the Time Slider is changed and is used to alter the current note.
+	/// </summary>
 	public void UseTimeSlider(){
 		currentNote = Mathf.RoundToInt(TimeSlider.value);
 	}//UseTimeSlider
+
+	/// <summary>
+	/// Loads the instrument.
+	/// </summary>
+	public void LoadInstrument(int choice){
+		List<List<AudioClip>> NewInstrument = new List<List<AudioClip>>();
+		switch (choice) {
+		case 1:
+			NewInstrument = soundLibrary.vibraphone;
+			break;
+		}
+		InstrumentEigthNotes = NewInstrument [0];
+		InstrumentQuarterNotes = NewInstrument [1];
+		InstrumentHalfNotes = NewInstrument [2];
+	}
 }//InstrumentScript
