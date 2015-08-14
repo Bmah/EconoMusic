@@ -10,6 +10,8 @@ public class InstrumentScript : MonoBehaviour {
 	public List<AudioClip> InstrumentQuarterNotes;
 	public List<AudioClip> InstrumentHalfNotes;
 
+	public AudioClip Instrument;
+
 	public float volume;
 
 	public List<float> Notes;
@@ -75,15 +77,21 @@ public class InstrumentScript : MonoBehaviour {
 			}//while
 //			Debug.Log ("Played note " + currentPitch);
 
+			currentNote *= 2;
+
 			if(noteValue < 0.25f){
-				audioSource.PlayOneShot (InstrumentEigthNotes [currentPitch], volume);
+				currentNote += (InstrumentQuarterNotes.Count*2*2);
+				//audioSource.PlayOneShot (InstrumentEigthNotes [currentPitch], volume);
 			}//if
 			else if(noteValue < 0.5f){
-				audioSource.PlayOneShot (InstrumentQuarterNotes [currentPitch], volume);
+				currentNote += (InstrumentQuarterNotes.Count*2);
+				//audioSource.PlayOneShot (InstrumentQuarterNotes [currentPitch], volume);
 			}//else if
 			else{
-				audioSource.PlayOneShot (InstrumentHalfNotes [currentPitch], volume);
+				//audioSource.PlayOneShot (InstrumentHalfNotes [currentPitch], volume);
 			}//else
+
+			audioSource.Play(Instrument);
 
 			playedNoteRecently = true;
 			currentNote++;
