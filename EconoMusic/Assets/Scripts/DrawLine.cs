@@ -60,7 +60,16 @@ public class DrawLine : MonoBehaviour
 		}
 		if(Input.GetMouseButtonDown(1))
 			ToggleDraw();
-
+		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+			linePoints.RemoveAt (lineCount - 1);
+			Debug.Log ("before: ");
+			Debug.Log (lineCount-1);
+			lineCount = lineCount - 1;
+			Debug.Log (lineCount-1);
+			lastPos = linePoints [lineCount - 1];
+			Debug.Log (linePoints[lineCount-1]);
+			UpdateLine();
+		}
 	}
 
 
