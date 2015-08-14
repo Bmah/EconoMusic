@@ -53,6 +53,7 @@ public class InstrumentScript : MonoBehaviour {
 	void Update () {
 		noteValue = TempoSlider.value;
 		volume = VolumeSlider.value;
+		audioSource.volume = volume;
 		loop = LoopToggle.isOn;
 
 		if (currentNote < Notes.Count && play) {
