@@ -21,6 +21,20 @@ public class LoadTexture : MonoBehaviour{
 	//Prevents more than one texture from being loaded on the same object (AAJ)
 	public bool loaded = false;
 
+	//Holds the prefab for a new slot (AAJ)
+	public GameObject slot;
+
+	//Holds a the panel where the slots are stored (AAJ)
+	public GameObject slotPanel;
+
+	// Use this for initialization
+	void Start ()
+	{
+		//resets the loaded variable for new instantiations of slot (AAJ)
+		loaded = false;
+
+	}//Start
+
 	public void OnMouseDown(){
 
 		if(loaded == false){
@@ -75,5 +89,12 @@ public class LoadTexture : MonoBehaviour{
 
 		//Loads the new sprite into the object's sprite component (AAJ)
 		GetComponent<Image>().sprite = loadedSprite;
+		
+		//instantiates a new slot and texture that can load another image (AAJ)
+		GameObject newSlot = Instantiate(slot, new Vector3(0,0,0), Quaternion.identity) as GameObject;
+
+		//sets the new slots parent to the slot panel (AAJ)
+		newSlot.transform.SetParent(slotPanel.transform, false);
+
 	}
 }
