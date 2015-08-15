@@ -107,8 +107,9 @@ public class InstrumentScript : MonoBehaviour {
 				audioSources[1].time = currentPitch;
 				audioSources[1].Play();
 			}//else
-			if(noteValue < 1f){
-				useFirstAudioSource = !useFirstAudioSource;
+			if(noteValue > 1f){
+				useFirstAudioSource = true;
+				audioSources[1].Stop();
 			}//if
 
 			playedNoteRecently = true;
