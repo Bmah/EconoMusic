@@ -5,6 +5,9 @@ using UnityEngine.EventSystems;
 
 public class DragAndDrop : MonoBehaviour, IBeginDragHandler,IDragHandler,IEndDragHandler{
 
+	//Holds the LoadTexture script so objects without a loaded image cannot be dragged (AAJ)
+	public LoadTexture loadTexture;
+
 	//Holds the GameObject being dragged (AJJ)
 	public static GameObject itemBeingDragged;
 
@@ -18,10 +21,13 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler,IDragHandler,IEndDra
 	#region IBeginDragHandler implementation
 	public void OnBeginDrag(PointerEventData eventData){
 
-		itemBeingDragged = gameObject;
-		startPosition = transform.position;
-		startParent = transform.parent;
-		GetComponent<CanvasGroup>().blocksRaycasts = false;
+		if(loadTexture.loaded == true){
+
+			itemBeingDragged = gameObject;
+			startPosition = transform.position;
+			startParent = transform.parent;
+			GetComponent<CanvasGroup>().blocksRaycasts = false;
+		}
 	}//OnBeginDrag
 	#endregion
 
@@ -29,7 +35,10 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler,IDragHandler,IEndDra
 	#region IDragHandler implementation
 	public void OnDrag(PointerEventData eventData){
 
-		transform.position = Input.mousePosition;
+		if(loadTexture.loaded == true){
+
+			transform.position = Input.mousePosition;
+		}
 	}//OnDrag
 	#endregion
 
@@ -37,13 +46,16 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler,IDragHandler,IEndDra
 	#region IEndDragHandler implementation
 	public void OnEndDrag(PointerEventData eventData){
 
-		itemBeingDragged = null;
-		GetComponent<CanvasGroup>().blocksRaycasts = true;
+		if(loadTexture.loaded == true){
 
-		if(transform.parent == startParent){
+			itemBeingDragged = null;
+			GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+			if(transform.parent == startParent){
 
 			transform.position = startPosition;
-		}//if
+			}//if
+		}
 	}//OnEndDrag
 	#endregion
 }//DragAndDrop

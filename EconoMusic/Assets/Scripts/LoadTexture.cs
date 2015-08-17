@@ -8,7 +8,6 @@ public class LoadTexture : MonoBehaviour{
 	public FileBrowser browser;
 	public FileSelectMode mode;
 	public string[] searchPatterns;
-	bool selected;
 	FileInfo sel;
 	string path = "";
 
@@ -25,7 +24,7 @@ public class LoadTexture : MonoBehaviour{
 	public GameObject slot;
 
 	//Holds a the panel where the slots are stored (AAJ)
-	public GameObject slotPanel;
+	public GameObject texturePanel;
 
 	// Use this for initialization
 	void Start ()
@@ -39,7 +38,6 @@ public class LoadTexture : MonoBehaviour{
 
 		if(loaded == false){
 
-			selected = false;
 			if(!browser.isShowing){
 
 				browser.Show (path, searchPatterns, this, mode);
@@ -94,7 +92,6 @@ public class LoadTexture : MonoBehaviour{
 		GameObject newSlot = Instantiate(slot, new Vector3(0,0,0), Quaternion.identity) as GameObject;
 
 		//sets the new slots parent to the slot panel (AAJ)
-		newSlot.transform.SetParent(slotPanel.transform, false);
-
+		newSlot.transform.SetParent(texturePanel.transform, false);
 	}
 }
