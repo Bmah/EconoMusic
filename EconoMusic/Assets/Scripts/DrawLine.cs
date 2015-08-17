@@ -71,9 +71,10 @@ public class DrawLine : MonoBehaviour
 			//Debug.Log (lineCount-1);
 			lineCount = lineCount - 1;
 			//Debug.Log (lineCount-1);
-			if(lineCount == 0)
-				lastPos = Vector3(0,0,0);
+			if(lineCount == 0) {
+				lastPos = new Vector3(0,0,0);
 				return;
+			}
 			lastPos = linePoints [lineCount - 1];
 			//Debug.Log (linePoints[lineCount-1]);
 			UpdateLine();
