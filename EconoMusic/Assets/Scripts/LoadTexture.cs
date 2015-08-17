@@ -14,7 +14,10 @@ public class LoadTexture : MonoBehaviour{
 	//Holds the file path so textures can be loaded in (AAJ)
 	string filePath;
 
-	//Holds this objects sprite (AAJ)
+	//Holds the default image for the textures (AAJ)
+	public Sprite defaultPlusImage;
+
+	//Holds the sprite that will be loaded into this object (AAJ)
 	public Sprite loadedSprite;
 
 	//Prevents more than one texture from being loaded on the same object (AAJ)
@@ -26,13 +29,32 @@ public class LoadTexture : MonoBehaviour{
 	//Holds a the panel where the slots are stored (AAJ)
 	public GameObject texturePanel;
 
+	//Holds a button that will delete a loaded texture (AAJ)
+	public GameObject deleteButton;
+
 	// Use this for initialization
 	void Start ()
 	{
 		//resets the loaded variable for new instantiations of slot (AAJ)
 		loaded = false;
 
+		//sets the texture to the default image when it is generated (AAJ)
+		GetComponent<Image>().sprite = defaultPlusImage;
+
 	}//Start
+
+	// Update is called once per frame
+	void Update(){
+
+		if(loaded == true){
+		
+			deleteButton.SetActive(true);
+		}//if 
+		else{
+
+			deleteButton.SetActive(false);
+		}//else
+	}//update
 
 	public void OnMouseDown(){
 
@@ -40,7 +62,7 @@ public class LoadTexture : MonoBehaviour{
 
 			if(!browser.isShowing){
 
-				browser.Show (path, searchPatterns, this, mode);
+				browser.Show(path, searchPatterns, this, mode);
 			}
 		}
 	}
@@ -94,4 +116,14 @@ public class LoadTexture : MonoBehaviour{
 		//sets the new slots parent to the slot panel (AAJ)
 		newSlot.transform.SetParent(texturePanel.transform, false);
 	}
-}
+
+	/// <summary>
+	/// Deletes the texture. (AAJ)
+	/// </summary>
+	public void DeleteTexture() {
+
+		//the texture destroys its parent, its children and itself in the process (AAJ)
+		Destroy(transform.parent.gameObject);
+
+	}//DeleteTexture
+}//LoadTexture
