@@ -16,7 +16,7 @@ public class DrawLine : MonoBehaviour
 	int lineCount = 0;//number of points?  not sure
 	private bool drawing;//toggles left click drawing on and off
 	private bool flushed;//sets true after first point, to flush the garbage values
-	
+	public float xThreshold = 0.001f;//controls minimum distance in x between two points
 	Vector3 lastPos = Vector3.one * float.MaxValue;
 	//Vector3 prevPos = lastPos;
 	
@@ -45,22 +45,37 @@ public class DrawLine : MonoBehaviour
 				if(flushed) {
 					if(mouseWorld.x < lastPos.x)
 						return;
+					if(mouseWorld.x - lastPos.x <= xThreshold)
+						return;
 				}
 				lastPos = mouseWorld;
 				if (linePoints == null) 
 					linePoints = new List<Vector3> ();
-				Debug.Log ("checking :");
-				Debug.Log (mouseWorld);
+				//Debug.Log ("checking :");
+				//Debug.Log (mouseWorld);
 				linePoints.Add (mouseWorld);
-				Debug.Log ("Added: ");
-				Debug.Log (mouseWorld);
+				//Debug.Log ("Added: ");
+				//Debug.Log (mouseWorld);
 				UpdateLine ();
 				flushed = true;
 			}
 		}
 		if(Input.GetMouseButtonDown(1))
 			ToggleDraw();
-
+		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+			if(lineCount == 0)
+				return;
+			linePoints.RemoveAt (lineCount - 1);
+			//Debug.Log ("before: ");
+			//Debug.Log (lineCount-1);
+			lineCount = lineCount - 1;
+			//Debug.Log (lineCount-1);
+			if(lineCount == 0)
+				return;
+			lastPos = linePoints [lineCount - 1];
+			//Debug.Log (linePoints[lineCount-1]);
+			UpdateLine();
+		}
 	}
 
 
