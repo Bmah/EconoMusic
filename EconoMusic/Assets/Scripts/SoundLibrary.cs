@@ -3,13 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class SoundLibrary : MonoBehaviour {
-	//Enumeration of the various instruments available. Currently only Vibraphone has audio files.
-	public enum Instrument {vibraphone, theramin, sax, digeredoo, trumpet, clarinet, politician, glaciar, mayonnaise, horseradish};
+	//These are the variables for the various sound files.
+	public AudioClip vibraphone;
 
-	//Lists of each of the notes for vibraphone that gets placed in the nested List.
-	public List<AudioClip> vibraphoneE, vibraphoneQ, vibraphoneH = new List<AudioClip>();
-	//Nested list for vibraphone that contains all of the notes.
-	public List<List<AudioClip>> vibraphone = new List<List<AudioClip>>();
+
+	////////////////////EVERYTHING BELOW IS LEGACY CODE
+//	//Enumeration of the various instruments available. Currently only Vibraphone has audio files.
+//	public enum Instrument {vibraphone, theramin, sax, digeredoo, trumpet, clarinet, politician, glaciar, mayonnaise, horseradish};
+//
+//	//Lists of each of the notes for vibraphone that gets placed in the nested List.
+//	public List<AudioClip> vibraphoneE, vibraphoneQ, vibraphoneH = new List<AudioClip>();
+//	//Nested list for vibraphone that contains all of the notes.
+//	public List<List<AudioClip>> vibraphone = new List<List<AudioClip>>();
 
 //	public List<AudioClip> theraminE, theraminQ, theraminH = new List<AudioClip>();
 //	public List<List<AudioClip>> theramin = new List<List<AudioClip>> ();
@@ -26,62 +31,62 @@ public class SoundLibrary : MonoBehaviour {
 //	public List<AudioClip> clarinetE, clarinetQ, clarinetH = new List<AudioClip>();
 //	public List<List<AudioClip>> clarinet = new List<List<AudioClip>>();
 
-	void Awake () {
-		//Fills the nested Array with its component parts.
-		vibraphone.Add (vibraphoneE);
-		vibraphone.Add (vibraphoneQ);
-		vibraphone.Add (vibraphoneH);
-//		theramin.Add (theraminE);
-//		theramin.Add (theraminQ);
-//		theramin.Add (theraminH);
-//		sax.Add (saxE);
-//		sax.Add (saxQ);
-//		sax.Add (saxH);
-//		digeredoo.Add (digeredooE);
-//		digeredoo.Add (digeredooQ);
-//		digeredoo.Add (digeredooH);
-//		trumpet.Add (trumpetE);
-//		trumpet.Add (trumpetQ);
-//		trumpet.Add (trumpetH);
-//		clarinet.Add (clarinetE);
-//		clarinet.Add (clarinetQ);
-//		clarinet.Add (clarinetH);
-	}
+//	void Awake () {
+//		//Fills the nested Array with its component parts.
+//		vibraphone.Add (vibraphoneE);
+//		vibraphone.Add (vibraphoneQ);
+//		vibraphone.Add (vibraphoneH);
+////		theramin.Add (theraminE);
+////		theramin.Add (theraminQ);
+////		theramin.Add (theraminH);
+////		sax.Add (saxE);
+////		sax.Add (saxQ);
+////		sax.Add (saxH);
+////		digeredoo.Add (digeredooE);
+////		digeredoo.Add (digeredooQ);
+////		digeredoo.Add (digeredooH);
+////		trumpet.Add (trumpetE);
+////		trumpet.Add (trumpetQ);
+////		trumpet.Add (trumpetH);
+////		clarinet.Add (clarinetE);
+////		clarinet.Add (clarinetQ);
+////		clarinet.Add (clarinetH);
+//	}
 
-	//This function returns the List of sound files you're looking for by inputting the instrument enum.
-	public List<List<AudioClip>> GetSoundFiles(Instrument instrumentName) {
-		//vibraphone, theramin, sax, digeredoo, trumpet, clarinet, politician, glaciar, mayonnaise, horseradish
-
-		switch (instrumentName) {
-
-		case Instrument.vibraphone:
-
-			return vibraphone;
-
-//		case Instrument.theramin:
+//	//This function returns the List of sound files you're looking for by inputting the instrument enum.
+//	public List<List<AudioClip>> GetSoundFiles(Instrument instrumentName) {
+//		//vibraphone, theramin, sax, digeredoo, trumpet, clarinet, politician, glaciar, mayonnaise, horseradish
 //
-//			return theramin;
+//		switch (instrumentName) {
 //
-//		case Instrument.sax:
+//		case Instrument.vibraphone:
 //
-//			return sax;
+//			return vibraphone;
 //
-//		case Instrument.digeredoo:
+////		case Instrument.theramin:
+////
+////			return theramin;
+////
+////		case Instrument.sax:
+////
+////			return sax;
+////
+////		case Instrument.digeredoo:
+////
+////			return digeredoo;
+////
+////		case Instrument.trumpet:
+////
+////			return trumpet;
+////
+////		case Instrument.clarinet:
+////
+////			return clarinet;
 //
-//			return digeredoo;
+//		default:
 //
-//		case Instrument.trumpet:
+//			return vibraphone;
+//		}
 //
-//			return trumpet;
-//
-//		case Instrument.clarinet:
-//
-//			return clarinet;
-
-		default:
-
-			return vibraphone;
-		}
-
-	}
+//	}
 }
