@@ -36,7 +36,6 @@ public class InstrumentScript : MonoBehaviour {
 		}//for
 
 		audioSources = this.GetComponents<AudioSource> ();
-		Debug.Log (audioSources.Length);
 		audioSources[0].clip = Instrument;
 		audioSources[1].clip = Instrument;
 
