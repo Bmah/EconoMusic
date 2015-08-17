@@ -7,10 +7,6 @@ public class InstrumentScript : MonoBehaviour {
 	private AudioSource[] audioSources;
 	private bool useFirstAudioSource = true;
 
-	public List<AudioClip> InstrumentEigthNotes;
-	public List<AudioClip> InstrumentQuarterNotes;
-	public List<AudioClip> InstrumentHalfNotes;
-
 	public AudioClip Instrument;
 	int NumberOfNotes = 36;
 
@@ -40,7 +36,6 @@ public class InstrumentScript : MonoBehaviour {
 		}//for
 
 		audioSources = this.GetComponents<AudioSource> ();
-		Debug.Log (audioSources.Length);
 		audioSources[0].clip = Instrument;
 		audioSources[1].clip = Instrument;
 
@@ -69,9 +64,15 @@ public class InstrumentScript : MonoBehaviour {
 			audioSources[1].Stop();
 		}//if
 
-		if (currentNote == Notes.Count && loop) {
-			currentNote = 0;
-			TimeSlider.value = 0;
+		if (currentNote == Notes.Count) {
+			if(loop){
+				currentNote = 0;
+				TimeSlider.value = 0;
+			}//if
+			else{
+				audioSources[0].Stop();
+				audioSources[1].Stop();
+			}//else
 		}//if
 	}//Update
 
@@ -107,10 +108,14 @@ public class InstrumentScript : MonoBehaviour {
 				audioSources[1].time = currentPitch;
 				audioSources[1].Play();
 			}//else
+
 			if(noteValue > 1f){
 				useFirstAudioSource = true;
 				audioSources[1].Stop();
 			}//if
+			else{
+				useFirstAudioSource = !useFirstAudioSource;
+			}//else
 
 			playedNoteRecently = true;
 			currentNote++;
@@ -146,14 +151,10 @@ public class InstrumentScript : MonoBehaviour {
 	/// Loads the instrument.
 	/// </summary>
 	public void LoadInstrument(int choice){
-		List<List<AudioClip>> NewInstrument = new List<List<AudioClip>>();
 		switch (choice) {
 		case 1:
-			NewInstrument = soundLibrary.vibraphone;
+			//Instrument = soundLibrary.vibraphone;
 			break;
 		}
-		InstrumentEigthNotes = NewInstrument [0];
-		InstrumentQuarterNotes = NewInstrument [1];
-		InstrumentHalfNotes = NewInstrument [2];
 	}
 }//InstrumentScript
