@@ -16,9 +16,10 @@ public class DrawLine : MonoBehaviour
 	int lineCount = 0;//number of points?  not sure
 	private bool drawing;//toggles left click drawing on and off
 	private bool flushed;//sets true after first point, to flush the garbage values
-	
+	public float xThreshold = 0.001f;//controls minimum distance in x between two points
 	Vector3 lastPos = Vector3.one * float.MaxValue;
-	//Vector3 prevPos = lastPos;
+	public float performanceSeconds;
+	public float noteTimesTest = 1f;
 	
 	void Awake()
 	{
@@ -45,22 +46,39 @@ public class DrawLine : MonoBehaviour
 				if(flushed) {
 					if(mouseWorld.x < lastPos.x)
 						return;
+					if(mouseWorld.x - lastPos.x <= xThreshold)
+						return;
 				}
 				lastPos = mouseWorld;
 				if (linePoints == null) 
 					linePoints = new List<Vector3> ();
-				Debug.Log ("checking :");
-				Debug.Log (mouseWorld);
+				//Debug.Log ("checking :");
+				//Debug.Log (mouseWorld);
 				linePoints.Add (mouseWorld);
-				Debug.Log ("Added: ");
-				Debug.Log (mouseWorld);
+				//Debug.Log ("Added: ");
+				//Debug.Log (mouseWorld);
 				UpdateLine ();
 				flushed = true;
 			}
 		}
 		if(Input.GetMouseButtonDown(1))
 			ToggleDraw();
-
+		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+			if(lineCount == 0)
+				return;
+			linePoints.RemoveAt (lineCount - 1);
+			//Debug.Log ("before: ");
+			//Debug.Log (lineCount-1);
+			lineCount = lineCount - 1;
+			//Debug.Log (lineCount-1);
+			if(lineCount == 0) {
+				lastPos = new Vector3(0,0,0);
+				return;
+			}
+			lastPos = linePoints [lineCount - 1];
+			//Debug.Log (linePoints[lineCount-1]);
+			UpdateLine();
+		}
 	}
 
 
@@ -82,4 +100,52 @@ public class DrawLine : MonoBehaviour
 		Debug.Log (drawing);
 	}
 
+	void Normalize(/*pass in variable for Note time*/) {
+		int numBeats = Mathf.RoundToInt(performanceSeconds / noteTimesTest);
+		List<Vector3> normalized = new List<Vector3> (numBeats);
+		float drawingDistance = linePoints [0].x - linePoints [lineCount - 1].x;
+		float xSpacing = drawingDistance / ((float)numBeats);
+		for (int i = 0; i < numBeats; i++) {
+			Vector3 toAdd = new Vector3 (0, 0, 0);
+			toAdd.z = thisCamera.nearClipPlane;
+			toAdd.x = xSpacing * i;
+			toAdd.y = linePoints [0].y;
+			float behindX = 1000000f;
+			float inFrontX = 0f;
+			float behindY = 0f;
+			float inFrontY = 0f;
+			bool notFound = true;
+			for (int j = 1; j < linePoints.Count; j++) {
+				float LPDist = linePoints [j].x - linePoints [0].x;
+				if (LPDist >= toAdd.x && notFound) {
+					inFrontX = linePoints [j].x;
+					inFrontY = linePoints [j].y;
+					behindX = linePoints [j - 1].x;
+					behindY = linePoints [j - 1].y;
+					notFound = false;
+				}
+			}
+			float distBetweenX = inFrontX - behindX;
+			float toSub = behindX - linePoints [0].x;
+			float relativeDistIn = toAdd.x - toSub;
+			float relativePercent = relativeDistIn / distBetweenX;
+			float distBetweenY = inFrontY - behindY;
+			bool up;
+			if (distBetweenX > 0) {
+				distBetweenY = Mathf.Abs (distBetweenY);
+				up = true;
+			} else {
+				distBetweenY = Mathf.Abs (distBetweenY);
+				up = false;
+			}
+			if (up)
+				toAdd.y = toAdd.y + (distBetweenY * relativePercent);
+			else
+				toAdd.y = toAdd.y - (distBetweenY * relativePercent);
+
+		}
+
+
+		
+	}
 }
