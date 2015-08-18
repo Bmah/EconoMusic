@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class GraphReceiver : MonoBehaviour, IDropHandler{
 
+	//Holds the tracing panel so it can be enabled (AAJ)
+	public GameObject tracingScreen;
+
 	//returns the first child (AAJ)
 	public GameObject item{
 
@@ -27,7 +30,7 @@ public class GraphReceiver : MonoBehaviour, IDropHandler{
 		if(!item){
 
 			GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
-
+			tracingScreen.SetActive(true);
 			//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
 		}
 	}
