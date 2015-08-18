@@ -32,6 +32,11 @@ public class InstrumentScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		//temporary notes
+		for (int i = 0; i < 100; i++) {
+			Notes.Add(Random.value);
+		}//for
+
 		audioSources = this.GetComponents<AudioSource> ();
 		audioSources[0].clip = Instrument;
 		audioSources[1].clip = Instrument;
@@ -41,7 +46,7 @@ public class InstrumentScript : MonoBehaviour {
 		GameObject temp = GameObject.FindGameObjectWithTag ("SoundLibrary");
 		if (temp != null) {
 			soundLibrary = temp.GetComponent<SoundLibrary> ();
-		}
+		}//if
 	}//Start
 	
 	// Update is called once per frame
@@ -149,10 +154,15 @@ public class InstrumentScript : MonoBehaviour {
 	/// </summary>
 	public void LoadInstrument(int choice){
 		switch (choice) {
-		case 1:
+		case 0:
 			Instrument = soundLibrary.vibraphone;
 			break;
+		case 1:
+			Instrument = soundLibrary.altoSaxophone;
+			break;
 		}
+		audioSources [0].clip = Instrument;
+		audioSources [1].clip = Instrument;
 		NumberOfNotes = Mathf.RoundToInt(Instrument.length)/6;
 	}
 
