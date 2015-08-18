@@ -12,13 +12,14 @@ public class MasterInstrument : MonoBehaviour {
 	public Slider MasterVolumeSlider;
 	public Toggle MasterLoopToggle;
 
-	int offset = 0;
+	float offset;
 
 	// Use this for initialization
 	void Start () {
 		if (InstrumentTemplate == null) {
 			Debug.LogError("Please Insert InstrumentTemplate into MasterInstrument Script");
 		}//if
+		offset = this.transform.position.x;
 	}//Start
 	
 	// Update is called once per frame
@@ -80,9 +81,10 @@ public class MasterInstrument : MonoBehaviour {
 	/// </summary>
 	public void NewInstrument(){
 		if (Instruments.Count < 5) {
-			GameObject NewInstrument = Instantiate (InstrumentTemplate, new Vector3 (offset, 200, 0), Quaternion.identity) as GameObject;
-			NewInstrument.transform.parent = GameCanvas.transform;
 			offset += 200;
+			GameObject NewInstrument = Instantiate (InstrumentTemplate, new Vector3 (offset, this.transform.position.y, 0), Quaternion.identity) as GameObject;
+			NewInstrument.transform.parent = GameCanvas.transform;
+
 			Instruments.Add (NewInstrument.GetComponent<InstrumentScript> ());
 		}//if
 	}//NewInstrument
