@@ -12,6 +12,7 @@ public class InstrumentScript : MonoBehaviour {
 
 	public float volume;
 
+	public List<Vector3> RawData;
 	public List<float> Notes;
 	private int currentNote = 0;
 
@@ -22,6 +23,7 @@ public class InstrumentScript : MonoBehaviour {
 	public Slider VolumeSlider;
 	public Toggle LoopToggle;
 	public Slider TimeSlider;
+	public Image Graph;
 
 	public bool loop = false;
 	public bool play = false;
@@ -30,11 +32,6 @@ public class InstrumentScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		//temporary NoteGenerator
-		for (int i = 0; i < 100; i++) {
-			Notes.Add(Random.value);
-		}//for
-
 		audioSources = this.GetComponents<AudioSource> ();
 		audioSources[0].clip = Instrument;
 		audioSources[1].clip = Instrument;
@@ -153,8 +150,30 @@ public class InstrumentScript : MonoBehaviour {
 	public void LoadInstrument(int choice){
 		switch (choice) {
 		case 1:
-			//Instrument = soundLibrary.vibraphone;
+			Instrument = soundLibrary.vibraphone;
 			break;
 		}
+		NumberOfNotes = Mathf.RoundToInt(Instrument.length)/6;
 	}
+
+	public void LoadDataForInstrument(Sprite GraphImage, List<Vector3> GraphData){
+		Notes = new List<float>();
+		float max = GraphData[0].y;
+		float min = GraphData[0].y;
+		Graph.sprite = GraphImage;
+		RawData = GraphData;
+
+		for (int i = 0; i < GraphData.Count; i++) {
+			if(GraphData[i].y > max){
+				max = GraphData[i].y;
+			}//if
+			else if(GraphData[i].y < min){
+				min = GraphData[i].y;
+			}//else if
+		}//for
+
+		for (int i = 0; i < GraphData.Count; i++) {
+			Notes.Add(Mathf.InverseLerp(min,max,GraphData[i].y));
+		}//for
+	}//LoadDataForInstrument
 }//InstrumentScript
