@@ -54,16 +54,14 @@ public class TracingScript : MonoBehaviour {
 
 		//disables the tracing screen (AAJ)
 		tracingScreen.SetActive(false);
-
-		//deletes the line so a new line can be drawn there later (AAJ)
-		drawLine.GetComponent<DrawLine>().linePoints.Clear();
-
-		//sets the line points list to null (AAJ)
-		drawLine.GetComponent<DrawLine>().linePoints = null;
-
-		//sets the last position to zero (AAJ)
-		drawLine.GetComponent<DrawLine>().lastPos = new Vector3(-10000,0,0);
-
+		
+		//prevents the delete function from working once the line's list is cleared (AAJ)
+		drawLine.GetComponent<DrawLine>().isRendered = false;
+		
+		//instantiates a new slot and texture that can load another image (AAJ)
+		GameObject DrawObject = GameObject.FindGameObjectWithTag("Draw");
+		GameObject newDrawObject = Instantiate(DrawObject, new Vector3(-557.7203f,-226.53f,0), Quaternion.identity) as GameObject;
+		Destroy(DrawObject);
 	}
 
 	/// <summary>

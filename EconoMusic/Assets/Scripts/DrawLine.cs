@@ -26,7 +26,10 @@ public class DrawLine : MonoBehaviour
 	public float performanceSeconds;
 	public float noteTimesTest = 1f;
 	public GameObject test;
-	
+
+	//This tests whether or not any part of the line has been rendered (AAJ)
+	public bool isRendered = false;
+
 	void Awake()
 	{
 		thisCamera = Camera.main;
@@ -65,11 +68,16 @@ public class DrawLine : MonoBehaviour
 				//Debug.Log (mouseWorld);
 				UpdateLine ();
 				flushed = true;
+
+				//it is now safe to delete the line because it exits (AAJ)
+				isRendered = true;
 			}
 		}
-		if(Input.GetMouseButtonDown(1))
+		if(Input.GetMouseButtonDown (1)){
 			ToggleDraw();
-		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+		}
+		//isRendered should prevent this part of the scirpt from deleting a line that isn't there (AAJ)
+		if((Input.GetKeyDown (KeyCode.LeftArrow)) && (isRendered == true)) {
 			if(lineCount == 0)
 				return;
 			linePoints.RemoveAt (lineCount - 1);
