@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 public class SoundLibrary : MonoBehaviour {
 	//These are the variables for the various sound files.
+	public AudioClip altoSaxophone;
+	public AudioClip digeredoo;
+	public AudioClip theremin;
+	public AudioClip trumpet;
 	public AudioClip vibraphone;
 
 
