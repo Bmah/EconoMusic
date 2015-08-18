@@ -7,17 +7,22 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class DrawLine : MonoBehaviour
 {
-	List<Vector3> linePoints = new List<Vector3>();
+	//I made this variable public so I can use it in TracingScript (AAJ)
+	public List<Vector3> linePoints = new List<Vector3>();
 	LineRenderer lineRenderer;//draws the line
 	public float startWidth = 1.0f;//width of the line, adjustable
 	public float endWidth = 1.0f;//width of the line, match it with start
 	public float threshold = 0.001f;//distance between notes
 	Camera thisCamera;//not sure
 	int lineCount = 0;//number of points?  not sure
-	private bool drawing;//toggles left click drawing on and off
+
+	//I made this variable public so I can use it in GraphReceiver and TracingScript (AAJ)
+	public bool drawing;//toggles left click drawing on and off
 	private bool flushed;//sets true after first point, to flush the garbage values
 	public float xThreshold = 0.001f;//controls minimum distance in x between two points
-	Vector3 lastPos = Vector3.one * float.MaxValue;
+
+	//I made this variable public so I can use it in TracingScript (AAJ)
+	public Vector3 lastPos = Vector3.one * float.MaxValue;
 	public float performanceSeconds;
 	public float noteTimesTest = 1f;
 	public GameObject test;
