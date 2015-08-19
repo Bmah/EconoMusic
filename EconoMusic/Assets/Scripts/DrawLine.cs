@@ -7,26 +7,33 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class DrawLine : MonoBehaviour
 {
-	List<Vector3> linePoints = new List<Vector3>();
+	//I made this variable public so I can use it in TracingScript (AAJ)
+	public List<Vector3> linePoints = new List<Vector3>();
 	LineRenderer lineRenderer;//draws the line
 	public float startWidth = 1.0f;//width of the line, adjustable
 	public float endWidth = 1.0f;//width of the line, match it with start
 	public float threshold = 0.001f;//distance between notes
 	Camera thisCamera;//not sure
 	int lineCount = 0;//number of points?  not sure
-	private bool drawing;//toggles left click drawing on and off
+
+	//I made this variable public so I can use it in GraphReceiver and TracingScript (AAJ)
+	public bool drawing;//toggles left click drawing on and off
 	private bool flushed;//sets true after first point, to flush the garbage values
 	public float xThreshold = 0.001f;//controls minimum distance in x between two points
-	Vector3 lastPos = Vector3.one * float.MaxValue;
+
+	//I made this variable public so I can use it in TracingScript (AAJ)
+	public Vector3 lastPos = Vector3.one * float.MaxValue;
 	public float performanceSeconds;
 	public float noteTimesTest = 1f;
 	public GameObject test;
-	
+
 	void Awake()
 	{
 		thisCamera = Camera.main;
 		lineRenderer = GetComponent<LineRenderer>();
-		drawing = true;
+
+		//I am restricting when you can draw (AAJ)
+		drawing = false;
 		flushed = false;
 	}
 	
@@ -62,9 +69,12 @@ public class DrawLine : MonoBehaviour
 				flushed = true;
 			}
 		}
-		if(Input.GetMouseButtonDown(1))
-			ToggleDraw();
-		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+		if(Input.GetMouseButtonDown (1)){
+			//I am restricting when you can draw (AAJ)
+			//ToggleDraw();
+		}
+		//isRendered should prevent this part of the scirpt from deleting a line that isn't there (AAJ)
+		if(Input.GetKeyDown (KeyCode.LeftArrow)){
 			if(lineCount == 0)
 				return;
 			linePoints.RemoveAt (lineCount - 1);
@@ -83,8 +93,11 @@ public class DrawLine : MonoBehaviour
 	}
 
 
-	void UpdateLine()
+	public void UpdateLine()
 	{
+		//I need this function to public so that the line is
+		//updated off the screen when I clear linePoints (AAJ)
+
 		lineRenderer.SetWidth(startWidth, endWidth);
 		lineRenderer.SetVertexCount(linePoints.Count);
 		
