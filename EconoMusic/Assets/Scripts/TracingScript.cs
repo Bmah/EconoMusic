@@ -48,7 +48,7 @@ public class TracingScript : MonoBehaviour {
 		//makes sure that the drawObject is not null (AAJ)
 		if(drawObject != null){
 
-			if(drawObject.GetComponent<DrawLine>().linePoints.Count > 1){
+			if(drawObject.GetComponent<DrawLine>().linePoints.Count > 0){
 
 				confrimButton.interactable = true;
 			}//if
