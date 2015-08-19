@@ -7,25 +7,33 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class DrawLine : MonoBehaviour
 {
-	List<Vector3> linePoints = new List<Vector3>();
+	//I made this variable public so I can use it in TracingScript (AAJ)
+	public List<Vector3> linePoints = new List<Vector3>();
 	LineRenderer lineRenderer;//draws the line
 	public float startWidth = 1.0f;//width of the line, adjustable
 	public float endWidth = 1.0f;//width of the line, match it with start
 	public float threshold = 0.001f;//distance between notes
 	Camera thisCamera;//not sure
 	int lineCount = 0;//number of points?  not sure
-	private bool drawing;//toggles left click drawing on and off
+
+	//I made this variable public so I can use it in GraphReceiver and TracingScript (AAJ)
+	public bool drawing;//toggles left click drawing on and off
 	private bool flushed;//sets true after first point, to flush the garbage values
 	public float xThreshold = 0.001f;//controls minimum distance in x between two points
-	Vector3 lastPos = Vector3.one * float.MaxValue;
+
+	//I made this variable public so I can use it in TracingScript (AAJ)
+	public Vector3 lastPos = Vector3.one * float.MaxValue;
 	public float performanceSeconds;
 	public float noteTimesTest = 1f;
-	
+	public GameObject test;
+
 	void Awake()
 	{
 		thisCamera = Camera.main;
 		lineRenderer = GetComponent<LineRenderer>();
-		drawing = true;
+
+		//I am restricting when you can draw (AAJ)
+		drawing = false;
 		flushed = false;
 	}
 	
@@ -61,9 +69,12 @@ public class DrawLine : MonoBehaviour
 				flushed = true;
 			}
 		}
-		if(Input.GetMouseButtonDown(1))
-			ToggleDraw();
-		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+		if(Input.GetMouseButtonDown (1)){
+			//I am restricting when you can draw (AAJ)
+			//ToggleDraw();
+		}
+		//isRendered should prevent this part of the scirpt from deleting a line that isn't there (AAJ)
+		if(Input.GetKeyDown (KeyCode.LeftArrow)){
 			if(lineCount == 0)
 				return;
 			linePoints.RemoveAt (lineCount - 1);
@@ -82,8 +93,11 @@ public class DrawLine : MonoBehaviour
 	}
 
 
-	void UpdateLine()
+	public void UpdateLine()
 	{
+		//I need this function to public so that the line is
+		//updated off the screen when I clear linePoints (AAJ)
+
 		lineRenderer.SetWidth(startWidth, endWidth);
 		lineRenderer.SetVertexCount(linePoints.Count);
 		
@@ -100,16 +114,15 @@ public class DrawLine : MonoBehaviour
 		Debug.Log (drawing);
 	}
 
-	void Normalize(/*pass in variable for Note time*/) {
+	public void Normalize(/*pass in variable for Note time*/) {
 		int numBeats = Mathf.RoundToInt(performanceSeconds / noteTimesTest);
-		List<Vector3> normalized = new List<Vector3> (numBeats);
-		float drawingDistance = linePoints [0].x - linePoints [lineCount - 1].x;
+		List<Vector3> normalized = new List<Vector3> (numBeats);//good
+		float drawingDistance = linePoints [lineCount - 1].x - linePoints [0].x;
 		float xSpacing = drawingDistance / ((float)numBeats);
 		for (int i = 0; i < numBeats; i++) {
 			Vector3 toAdd = new Vector3 (0, 0, 0);
 			toAdd.z = thisCamera.nearClipPlane;
 			toAdd.x = xSpacing * i;
-			toAdd.y = linePoints [0].y;
 			float behindX = 1000000f;
 			float inFrontX = 0f;
 			float behindY = 0f;
@@ -118,34 +131,57 @@ public class DrawLine : MonoBehaviour
 			for (int j = 1; j < linePoints.Count; j++) {
 				float LPDist = linePoints [j].x - linePoints [0].x;
 				if (LPDist >= toAdd.x && notFound) {
+					//Debug.Log (LPDist);
+					//Debug.Log (toAdd.x);
 					inFrontX = linePoints [j].x;
 					inFrontY = linePoints [j].y;
+					//Debug.Log (inFrontY);
 					behindX = linePoints [j - 1].x;
 					behindY = linePoints [j - 1].y;
 					notFound = false;
+					//Debug.Log (behindY);
 				}
-			}
+			}//good
+			toAdd.y = behindY;
 			float distBetweenX = inFrontX - behindX;
 			float toSub = behindX - linePoints [0].x;
 			float relativeDistIn = toAdd.x - toSub;
 			float relativePercent = relativeDistIn / distBetweenX;
 			float distBetweenY = inFrontY - behindY;
+			//good
 			bool up;
-			if (distBetweenX > 0) {
+			if (distBetweenY > 0) {
 				distBetweenY = Mathf.Abs (distBetweenY);
 				up = true;
 			} else {
 				distBetweenY = Mathf.Abs (distBetweenY);
 				up = false;
 			}
+
+			//Debug.Log (toAdd.y);
 			if (up)
 				toAdd.y = toAdd.y + (distBetweenY * relativePercent);
 			else
 				toAdd.y = toAdd.y - (distBetweenY * relativePercent);
-
+			Debug.Log (toAdd);
+			normalized.Add(toAdd);
 		}
 
+		TestDraw (normalized);
 
 		
 	}
+
+	void TestDraw(List<Vector3> normalized)
+	{
+
+		for(int i = 0; i < normalized.Count; i++)
+		{
+			Instantiate(test, normalized[i], Quaternion.identity);
+			
+		}
+		lineCount = normalized.Count;
+	}
+	
+
 }

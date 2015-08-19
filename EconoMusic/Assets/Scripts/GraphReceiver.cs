@@ -6,6 +6,17 @@ using UnityEngine.UI;
 
 public class GraphReceiver : MonoBehaviour, IDropHandler{
 
+	//Holds the TracingScript so the drawObject can be set (AAJ)
+	public TracingScript tracingScript;
+
+	//Holds the tracing panel so it can be enabled (AAJ)
+	public GameObject tracingScreen;
+
+	//Holds the tracing graph so it can be given the graph (AAJ)
+	public Image tracingGraph;
+
+	private GameObject drawObject;
+
 	//returns the first child (AAJ)
 	public GameObject item{
 
@@ -26,7 +37,18 @@ public class GraphReceiver : MonoBehaviour, IDropHandler{
 
 		if(!item){
 
+			//Copies the image from the dragged item to the instruments graph image (AAJ)
 			GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
+
+			//Sets the tracing graphs sprite and enables the tracing screen (AAJ) 
+			tracingGraph.sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
+			tracingScreen.SetActive(true);
+
+			//Finds the DrawObject that will be used to trace the graph (AAJ)
+			drawObject = GameObject.FindGameObjectWithTag("Draw");
+
+			//Sets the DrawObject that will be used to trace the graph in the TracingScript (AAJ)
+			tracingScript.SetDrawObject(drawObject);
 
 			//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
 		}

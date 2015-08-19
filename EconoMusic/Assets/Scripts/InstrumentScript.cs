@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine.UI;
 
 public class InstrumentScript : MonoBehaviour {
@@ -12,6 +13,7 @@ public class InstrumentScript : MonoBehaviour {
 
 	public float volume;
 
+	public List<Vector3> RawData;
 	public List<float> Notes;
 	private int currentNote = 0;
 
@@ -22,15 +24,17 @@ public class InstrumentScript : MonoBehaviour {
 	public Slider VolumeSlider;
 	public Toggle LoopToggle;
 	public Slider TimeSlider;
+	public Image Graph;
 
 	public bool loop = false;
 	public bool play = false;
 
 	private SoundLibrary soundLibrary;
+	private TracingScript tracingScript;
 
 	// Use this for initialization
 	void Start () {
-		//temporary NoteGenerator
+		//temporary notes
 		for (int i = 0; i < 100; i++) {
 			Notes.Add(Random.value);
 		}//for
@@ -44,7 +48,20 @@ public class InstrumentScript : MonoBehaviour {
 		GameObject temp = GameObject.FindGameObjectWithTag ("SoundLibrary");
 		if (temp != null) {
 			soundLibrary = temp.GetComponent<SoundLibrary> ();
+		}//if
+
+		GameObject temp2 = GameObject.FindGameObjectWithTag("Trace");
+		if (temp2 != null) {
+			tracingScript = temp2.GetComponent<TracingScript> ();
+			if(tracingScript == null){
+				Debug.LogError("tracing script is null");
+			}
+		}//if
+		else {
+			Debug.Log ("Nothing Found");
 		}
+
+		LoadDataForInstrument (tracingScript.GetSprite(),tracingScript.GetLinePoints());
 	}//Start
 	
 	// Update is called once per frame
@@ -152,9 +169,35 @@ public class InstrumentScript : MonoBehaviour {
 	/// </summary>
 	public void LoadInstrument(int choice){
 		switch (choice) {
+		case 0:
+			Instrument = soundLibrary.vibraphone;
+			break;
 		case 1:
-			//Instrument = soundLibrary.vibraphone;
+			Instrument = soundLibrary.altoSaxophone;
 			break;
 		}
+		audioSources [0].clip = Instrument;
+		audioSources [1].clip = Instrument;
+		NumberOfNotes = Mathf.RoundToInt(Instrument.length)/6;
 	}
+
+	public void LoadDataForInstrument(Sprite GraphImage, List<Vector3> GraphData){
+		Notes = new List<float>();
+		float max = GraphData[0].y;
+		float min = GraphData[0].y;
+		Graph.sprite = GraphImage;
+		RawData = GraphData;
+		for (int i = 0; i < GraphData.Count; i++) {
+			if(GraphData[i].y > max){
+				max = GraphData[i].y;
+			}//if
+			else if(GraphData[i].y < min){
+				min = GraphData[i].y;
+			}//else if
+		}//for
+
+		for (int i = 0; i < GraphData.Count; i++) {
+			Notes.Add(Mathf.InverseLerp(min,max,GraphData[i].y));
+		}//for
+	}//LoadDataForInstrument
 }//InstrumentScript
