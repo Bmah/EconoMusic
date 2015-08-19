@@ -6,21 +6,25 @@ using System.Collections.Generic;
 
 public class TracingScript : MonoBehaviour {
 
-	//Holds teh Draw Line script so I can set when the line should be
-	//drawn and can get the points that are drawn (AAJ)
-	public DrawLine drawLine;
-
 	//Holds the panel where the tracing will be done (AAJ)
 	public GameObject tracingScreen;
+
+	//Holds the image that will be traced on (AAJ)
+	public Image tracingGraph;
+
+	//Holds the line that is used for tracing (AAJ)
+	private GameObject drawObject;
 
 	//Holds the points from the drawn line (AAJ)
 	private List<Vector3> linePoints; 
 
-	// Use this for initialization
-	void Start(){
-		
-		//Disables the tracing at the start of the program (AAJ)
-		drawLine.GetComponent<DrawLine>().drawing = false;
+	/// <summary>
+	/// Sets the drawObject so that the user has a 
+	/// line to trace with (AAJ)
+	/// </summary>
+	public void SetDrawObject(GameObject drawObject){
+
+		this.drawObject = drawObject;
 	}
 
 	/// <summary>
@@ -28,50 +32,71 @@ public class TracingScript : MonoBehaviour {
 	/// </summary>
 	public void DrawingOn(){
 
-		//Enables the tracing (AAJ)
-		drawLine.GetComponent<DrawLine>().drawing = true;
+		//makes sure that the drawObject is not null
+		if(drawObject != null){
+
+			//Enables the tracing (AAJ)
+			drawObject.GetComponent<DrawLine>().drawing = true;
+		}
 	}
 
 	/// <summary>
 	/// Truns tracing off (AAJ)
 	/// </summary>
 	public void DrawingOff(){
-
-		//Disables the tracing (AAJ)
-		drawLine.GetComponent<DrawLine>().drawing = false;
+		
+		//makes sure that the drawObject is not null
+		if(drawObject != null){
+			
+			//Disables the tracing (AAJ)
+			drawObject.GetComponent<DrawLine>().drawing = false;
+		}
 	}
 
 	/// <summary>
-	/// Confirms the tracing (AAJ)
+	///Confirms the tracing (AAJ)
 	/// </summary>
 	public void ConfirmTrace(){
 
 		//Disables the tracing when the confirm button is pressed (AAJ)
-		drawLine.GetComponent<DrawLine> ().drawing = false;
+		drawObject.GetComponent<DrawLine>().drawing = false;
 
 		//Gets the line points drawn in the tracing (AAJ)
-		this.linePoints = drawLine.GetComponent<DrawLine>().linePoints;
+		this.linePoints = drawObject.GetComponent<DrawLine>().linePoints;
 
 		//disables the tracing screen (AAJ)
 		tracingScreen.SetActive(false);
-		
-		//prevents the delete function from working once the line's list is cleared (AAJ)
-		drawLine.GetComponent<DrawLine>().isRendered = false;
-		
-		//instantiates a new slot and texture that can load another image (AAJ)
-		GameObject DrawObject = GameObject.FindGameObjectWithTag("Draw");
-		GameObject newDrawObject = Instantiate(DrawObject, new Vector3(-557.7203f,-226.53f,0), Quaternion.identity) as GameObject;
-		Destroy(DrawObject);
+
+		//clears the previous line's points so they will not render on the screen (AAJ)
+		drawObject.GetComponent<DrawLine>().linePoints.Clear();
+
+		//removes the line from the screen (AAJ)
+		drawObject.GetComponent<DrawLine> ().UpdateLine();
+
+		//Instantiates a line that can be used to trace a graph (AAJ)
+		GameObject newDrawObject = Instantiate(drawObject, new Vector3(-557.7203f,-226.53f,0), Quaternion.identity) as GameObject;
+		newDrawObject.transform.SetParent(tracingScreen.transform, true);
+
+		//Destroys the previous line (AAJ)
+		Destroy(drawObject);
 	}
 
 	/// <summary>
-	/// Sets the line points so the audio player 
-	/// has something to play music off of. (AAJ)
+	/// Gives the line points to the audio player so it 
+	/// has something to play music off of (AAJ)
 	/// </summary>
-	/// <returns>The line points.</returns>
-	public List<Vector3> SetLinePoints(){
+	public List<Vector3> GetLinePoints(){
 
 		//returns the list of points drawn on the screen (AAJ)
 		return(linePoints);
+	}
+
+	/// <summary>
+	/// Gives the sprite to an instrument (AAJ)
+	/// </summary>
+	public Sprite GetSprite(){
+		
+		//returns the sprite (AAJ)
+		return(tracingGraph.sprite);
 	}
 }

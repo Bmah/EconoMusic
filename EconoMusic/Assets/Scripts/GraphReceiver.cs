@@ -6,14 +6,16 @@ using UnityEngine.UI;
 
 public class GraphReceiver : MonoBehaviour, IDropHandler{
 
-	//Holds teh Draw Line script so I can set when the line should be drawn (AAJ)
-	public DrawLine drawLine;
+	//Holds the TracingScript so the drawObject can be set (AAJ)
+	public TracingScript tracingScript;
 
 	//Holds the tracing panel so it can be enabled (AAJ)
 	public GameObject tracingScreen;
 
 	//Holds the tracing graph so it can be given the graph (AAJ)
 	public Image tracingGraph;
+
+	private GameObject drawObject;
 
 	//returns the first child (AAJ)
 	public GameObject item{
@@ -42,8 +44,11 @@ public class GraphReceiver : MonoBehaviour, IDropHandler{
 			tracingGraph.sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
 			tracingScreen.SetActive(true);
 
-			//enables tracing (AAJ)
-			drawLine.GetComponent<DrawLine>().drawing = true;
+			//Finds the DrawObject that will be used to trace the graph (AAJ)
+			drawObject = GameObject.FindGameObjectWithTag("Draw");
+
+			//Sets the DrawObject that will be used to trace the graph in the TracingScript (AAJ)
+			tracingScript.SetDrawObject(drawObject);
 
 			//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
 		}
