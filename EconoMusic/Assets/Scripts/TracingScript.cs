@@ -12,6 +12,9 @@ public class TracingScript : MonoBehaviour {
 	//Holds the image that will be traced on (AAJ)
 	public Image tracingGraph;
 
+	//Holds the confirm button so it cannot be selected (AAJ)
+	public Button confrimButton;
+
 	//Holds the New Instrument button so it can be enabled 
 	//when a new instrument is ready to be made (AAJ)
 	public Button newInstrument;
@@ -20,7 +23,15 @@ public class TracingScript : MonoBehaviour {
 	private GameObject drawObject;
 
 	//Holds the points from the drawn line (AAJ)
-	private List<Vector3> linePoints; 
+	public List<Vector3> linePoints; 
+
+	// Use this for initialization
+	void Start(){
+
+		//disables the the tracing screen at the start of
+		//the game in case someone accidentally enables it (AAJ)
+		tracingScreen.SetActive(false);
+	}//Start
 
 	/// <summary>
 	/// Sets the drawObject so that the user has a 
@@ -31,36 +42,56 @@ public class TracingScript : MonoBehaviour {
 		this.drawObject = drawObject;
 	}
 
+	// Update is called once per frame
+	void Update(){
+
+		//makes sure that the drawObject is not null (AAJ)
+		if(drawObject != null){
+
+			if(drawObject.GetComponent<DrawLine>().linePoints.Count > 1){
+
+				confrimButton.interactable = true;
+			}//if
+			else{
+
+				confrimButton.interactable = false;
+			}//else
+		}//if
+	}//Upadte
+
 	/// <summary>
 	/// Turns tracing on (AAJ)
 	/// </summary>
 	public void DrawingOn(){
 
-		//makes sure that the drawObject is not null
+		//makes sure that the drawObject is not null (AAJ)
 		if(drawObject != null){
 
 			//Enables the tracing (AAJ)
 			drawObject.GetComponent<DrawLine>().drawing = true;
-		}
-	}
+		}//if
+	}//DrawingOn
 
 	/// <summary>
 	/// Truns tracing off (AAJ)
 	/// </summary>
 	public void DrawingOff(){
 		
-		//makes sure that the drawObject is not null
+		//makes sure that the drawObject is not null (AAJ)
 		if(drawObject != null){
 			
 			//Disables the tracing (AAJ)
 			drawObject.GetComponent<DrawLine>().drawing = false;
-		}
-	}
+		}//if
+	}//DrawingOff
 
 	/// <summary>
 	///Confirms the tracing (AAJ)
 	/// </summary>
 	public void ConfirmTrace(){
+
+		//Normalizes the line before it is turned into music (AAJ)
+		drawObject.GetComponent<DrawLine>().Normalize();
 
 		//Disables the tracing when the confirm button is pressed (AAJ)
 		drawObject.GetComponent<DrawLine>().drawing = false;
@@ -86,7 +117,7 @@ public class TracingScript : MonoBehaviour {
 
 		//enables the New Instrumetn button (AAJ)
 		newInstrument.interactable = true;
-	}
+	}//ConfrimTrace
 
 	/// <summary>
 	/// Gives the line points to the audio player so it 
@@ -96,7 +127,7 @@ public class TracingScript : MonoBehaviour {
 
 		//returns the list of points drawn on the screen (AAJ)
 		return(linePoints);
-	}
+	}//GetLinePoints
 
 	/// <summary>
 	/// Gives the sprite to an instrument (AAJ)
@@ -105,5 +136,5 @@ public class TracingScript : MonoBehaviour {
 		
 		//returns the sprite (AAJ)
 		return(tracingGraph.sprite);
-	}
+	}//GetSprite
 }
