@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine.UI;
 
 public class InstrumentScript : MonoBehaviour {
@@ -29,6 +30,7 @@ public class InstrumentScript : MonoBehaviour {
 	public bool play = false;
 
 	private SoundLibrary soundLibrary;
+	private TracingScript tracingScript;
 
 	// Use this for initialization
 	void Start () {
@@ -47,6 +49,19 @@ public class InstrumentScript : MonoBehaviour {
 		if (temp != null) {
 			soundLibrary = temp.GetComponent<SoundLibrary> ();
 		}//if
+
+		GameObject temp2 = GameObject.FindGameObjectWithTag("Trace");
+		if (temp2 != null) {
+			tracingScript = temp2.GetComponent<TracingScript> ();
+			if(tracingScript == null){
+				Debug.LogError("tracing script is null");
+			}
+		}//if
+		else {
+			Debug.Log ("Nothing Found");
+		}
+
+		LoadDataForInstrument (tracingScript.GetSprite(),tracingScript.GetLinePoints());
 	}//Start
 	
 	// Update is called once per frame
@@ -172,7 +187,8 @@ public class InstrumentScript : MonoBehaviour {
 		float min = GraphData[0].y;
 		Graph.sprite = GraphImage;
 		RawData = GraphData;
-
+		Debug.Log("HI");
+		Debug.Log (GraphData.Count);
 		for (int i = 0; i < GraphData.Count; i++) {
 			if(GraphData[i].y > max){
 				max = GraphData[i].y;
