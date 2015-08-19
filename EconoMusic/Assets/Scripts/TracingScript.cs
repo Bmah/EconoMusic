@@ -12,6 +12,10 @@ public class TracingScript : MonoBehaviour {
 	//Holds the image that will be traced on (AAJ)
 	public Image tracingGraph;
 
+	//Holds the New Instrument button so it can be enabled 
+	//when a new instrument is ready to be made (AAJ)
+	public Button newInstrument;
+
 	//Holds the line that is used for tracing (AAJ)
 	private GameObject drawObject;
 
@@ -62,8 +66,7 @@ public class TracingScript : MonoBehaviour {
 		drawObject.GetComponent<DrawLine>().drawing = false;
 
 		//Gets the line points drawn in the tracing (AAJ)
-		linePoints = new List<Vector3>();
-		linePoints = drawObject.GetComponent<DrawLine>().linePoints;
+		linePoints = new List<Vector3>(drawObject.GetComponent<DrawLine>().linePoints);
 
 		//disables the tracing screen (AAJ)
 		tracingScreen.SetActive(false);
@@ -80,6 +83,9 @@ public class TracingScript : MonoBehaviour {
 
 		//Destroys the previous line (AAJ)
 		Destroy(drawObject);
+
+		//enables the New Instrumetn button (AAJ)
+		newInstrument.interactable = true;
 	}
 
 	/// <summary>

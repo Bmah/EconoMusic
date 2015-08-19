@@ -187,8 +187,6 @@ public class InstrumentScript : MonoBehaviour {
 		float min = GraphData[0].y;
 		Graph.sprite = GraphImage;
 		RawData = GraphData;
-		Debug.Log("HI");
-		Debug.Log (GraphData.Count);
 		for (int i = 0; i < GraphData.Count; i++) {
 			if(GraphData[i].y > max){
 				max = GraphData[i].y;
