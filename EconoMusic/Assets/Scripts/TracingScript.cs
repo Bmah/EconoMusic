@@ -62,7 +62,8 @@ public class TracingScript : MonoBehaviour {
 		drawObject.GetComponent<DrawLine>().drawing = false;
 
 		//Gets the line points drawn in the tracing (AAJ)
-		this.linePoints = drawObject.GetComponent<DrawLine>().linePoints;
+		linePoints = new List<Vector3>();
+		linePoints = drawObject.GetComponent<DrawLine>().linePoints;
 
 		//disables the tracing screen (AAJ)
 		tracingScreen.SetActive(false);
