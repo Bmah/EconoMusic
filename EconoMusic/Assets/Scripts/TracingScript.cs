@@ -90,22 +90,19 @@ public class TracingScript : MonoBehaviour {
 	/// </summary>
 	public void ConfirmTrace(){
 
-		//Normalizes the line before it is turned into music (AAJ)
-		drawObject.GetComponent<DrawLine>().Normalize();
-
 		//Disables the tracing when the confirm button is pressed (AAJ)
 		drawObject.GetComponent<DrawLine>().drawing = false;
 
 		//Gets the line points drawn in the tracing (AAJ)
 		linePoints = new List<Vector3>(drawObject.GetComponent<DrawLine>().linePoints);
 
-		//disables the tracing screen (AAJ)
+		//Disables the tracing screen (AAJ)
 		tracingScreen.SetActive(false);
 
-		//clears the previous line's points so they will not render on the screen (AAJ)
+		//Clears the previous line's points so they will not render on the screen (AAJ)
 		drawObject.GetComponent<DrawLine>().linePoints.Clear();
 
-		//removes the line from the screen (AAJ)
+		//Removes the line from the screen (AAJ)
 		drawObject.GetComponent<DrawLine> ().UpdateLine();
 
 		//Instantiates a line that can be used to trace a graph (AAJ)
@@ -115,7 +112,7 @@ public class TracingScript : MonoBehaviour {
 		//Destroys the previous line (AAJ)
 		Destroy(drawObject);
 
-		//enables the New Instrumetn button (AAJ)
+		//Enables the New Instrumetn button (AAJ)
 		newInstrument.interactable = true;
 	}//ConfrimTrace
 

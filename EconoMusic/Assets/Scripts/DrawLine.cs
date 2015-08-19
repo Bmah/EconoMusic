@@ -23,7 +23,7 @@ public class DrawLine : MonoBehaviour
 
 	//I made this variable public so I can use it in TracingScript (AAJ)
 	public Vector3 lastPos = Vector3.one * float.MaxValue;
-	public float performanceSeconds;
+	//public float performanceSeconds;
 	public float noteTimesTest = 1f;
 	public GameObject test;
 
@@ -118,12 +118,15 @@ public class DrawLine : MonoBehaviour
 		Debug.Log (drawing);
 	}
 
-	public void Normalize(/*pass in variable for Note time*/) {
+	public List<Vector3> Normalize(int performanceSeconds, List<Vector3> drawnPoints){
+
 		int numBeats = Mathf.RoundToInt(performanceSeconds / noteTimesTest);
 		List<Vector3> normalized = new List<Vector3> (numBeats);//good
-		float drawingDistance = linePoints [lineCount - 1].x - linePoints [0].x;
+		float drawingDistance = drawnPoints [lineCount - 1].x - drawnPoints [0].x;
 		float xSpacing = drawingDistance / ((float)numBeats);
-		for (int i = 0; i < numBeats; i++) {
+
+		for(int i = 0; i < numBeats; i++){
+
 			Vector3 toAdd = new Vector3 (0, 0, 0);
 			toAdd.z = thisCamera.nearClipPlane;
 			toAdd.x = xSpacing * i;
@@ -132,32 +135,41 @@ public class DrawLine : MonoBehaviour
 			float behindY = 0f;
 			float inFrontY = 0f;
 			bool notFound = true;
-			for (int j = 1; j < linePoints.Count; j++) {
-				float LPDist = linePoints [j].x - linePoints [0].x;
-				if (LPDist >= toAdd.x && notFound) {
+
+			for(int j = 1; j < drawnPoints.Count; j++){
+
+				float LPDist = drawnPoints [j].x - drawnPoints [0].x;
+
+				if(LPDist >= toAdd.x && notFound){
+
 					//Debug.Log (LPDist);
 					//Debug.Log (toAdd.x);
-					inFrontX = linePoints [j].x;
-					inFrontY = linePoints [j].y;
+					inFrontX = drawnPoints [j].x;
+					inFrontY = drawnPoints [j].y;
 					//Debug.Log (inFrontY);
-					behindX = linePoints [j - 1].x;
-					behindY = linePoints [j - 1].y;
+					behindX = drawnPoints [j - 1].x;
+					behindY = drawnPoints [j - 1].y;
 					notFound = false;
 					//Debug.Log (behindY);
 				}
 			}//good
+
 			toAdd.y = behindY;
 			float distBetweenX = inFrontX - behindX;
-			float toSub = behindX - linePoints [0].x;
+			float toSub = behindX - drawnPoints [0].x;
 			float relativeDistIn = toAdd.x - toSub;
 			float relativePercent = relativeDistIn / distBetweenX;
 			float distBetweenY = inFrontY - behindY;
 			//good
 			bool up;
-			if (distBetweenY > 0) {
+
+			if(distBetweenY > 0){
+
 				distBetweenY = Mathf.Abs (distBetweenY);
 				up = true;
-			} else {
+			} 
+			else{
+
 				distBetweenY = Mathf.Abs (distBetweenY);
 				up = false;
 			}
@@ -167,13 +179,15 @@ public class DrawLine : MonoBehaviour
 				toAdd.y = toAdd.y + (distBetweenY * relativePercent);
 			else
 				toAdd.y = toAdd.y - (distBetweenY * relativePercent);
-			Debug.Log (toAdd);
+			//Debug.Log (toAdd);
 			normalized.Add(toAdd);
 		}
 
-		TestDraw (normalized);
+		//Returns the normalized list of vector3's (AAJ)
+		return(normalized);
 
-		
+		//Throws an error (AAJ)
+		//TestDraw(normalized);
 	}
 
 	void TestDraw(List<Vector3> normalized)
@@ -186,6 +200,4 @@ public class DrawLine : MonoBehaviour
 		}
 		lineCount = normalized.Count;
 	}
-	
-
 }
