@@ -14,6 +14,9 @@ public class LoadTexture : MonoBehaviour{
 	//Holds the file path so textures can be loaded in (AAJ)
 	string filePath;
 
+	//Holds the name of the file so it can be used to display on an instrument (AAJ)
+	public string fileName;
+
 	//Holds the default image for the textures (AAJ)
 	public Sprite defaultPlusImage;
 
@@ -65,7 +68,7 @@ public class LoadTexture : MonoBehaviour{
 				browser.Show(path, searchPatterns, this, mode);
 			}
 		}
-	}
+	}//OnMouseDown
 	
 	// The FileBrowser will send a message to this MonoBehaviour when the user selects a file
 	// Set the 'SelectEventName' in the inspector to the name of the function you want to receive the message
@@ -75,22 +78,24 @@ public class LoadTexture : MonoBehaviour{
 			
 			//Loads in the texture (AAJ)
 			load(sel.path);
-	}
+	}//OnFileSelected
 	
 	void OnFileChange(FileInfo file){
 
+		//Gets the name of the file so it can be displayed on the instrument (AAJ)
+		fileName = file.name;
+
 		Debug.Log("File section changed to: " + file.name);
-	}
+	}//OnFileChange
 	
 	void OnBrowseCancel(){
 
 		Debug.Log("You have cancelled");
-	}
+	}//OnBrowseCancel
 
 	/// <summary>
 	/// Load the specified texture. (AAJ)
 	/// </summary>
-	/// <param name="filePath">File path.</param>
 	void load(string filePath){
 
 		//Prevents multiple textures being loaded onto the same object
@@ -115,7 +120,7 @@ public class LoadTexture : MonoBehaviour{
 
 		//sets the new slots parent to the slot panel (AAJ)
 		newSlot.transform.SetParent(texturePanel.transform, false);
-	}
+	}//Load
 
 	/// <summary>
 	/// Deletes the texture. (AAJ)

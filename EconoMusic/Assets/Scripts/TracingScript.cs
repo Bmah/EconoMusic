@@ -23,7 +23,10 @@ public class TracingScript : MonoBehaviour {
 	private GameObject drawObject;
 
 	//Holds the points from the drawn line (AAJ)
-	public List<Vector3> linePoints; 
+	private List<Vector3> linePoints; 
+
+	//Holds the name of the file so it can be used to display on an instrument (AAJ)
+	private string fileName;
 
 	// Use this for initialization
 	void Start(){
@@ -40,7 +43,15 @@ public class TracingScript : MonoBehaviour {
 	public void SetDrawObject(GameObject drawObject){
 
 		this.drawObject = drawObject;
-	}
+	}//SetDrawObject
+
+	/// <summary>
+	/// Sets the name of the file (AAJ)
+	/// </summary>
+	public void SetFileName(string fileName){
+
+		this.fileName = fileName;
+	}//SetFileName
 
 	// Update is called once per frame
 	void Update(){
@@ -103,7 +114,7 @@ public class TracingScript : MonoBehaviour {
 		drawObject.GetComponent<DrawLine>().linePoints.Clear();
 
 		//Removes the line from the screen (AAJ)
-		drawObject.GetComponent<DrawLine> ().UpdateLine();
+		drawObject.GetComponent<DrawLine>().UpdateLine();
 
 		//Instantiates a line that can be used to trace a graph (AAJ)
 		GameObject newDrawObject = Instantiate(drawObject, new Vector3(-557.7203f,-226.53f,0), Quaternion.identity) as GameObject;
@@ -115,6 +126,15 @@ public class TracingScript : MonoBehaviour {
 		//Enables the New Instrumetn button (AAJ)
 		newInstrument.interactable = true;
 	}//ConfrimTrace
+
+	/// <summary>
+	/// Gets the name of the file (AAJ)
+	/// </summary>
+	public string GetFileName(){
+
+		//returns the file name so an instrumetn can display it (AAJ)
+		return(fileName);
+	}//GetFileName
 
 	/// <summary>
 	/// Gives the line points to the audio player so it 
