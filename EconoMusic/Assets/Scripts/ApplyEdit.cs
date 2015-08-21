@@ -34,6 +34,19 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 
 				//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
 			}//if
+
+
+			if(DragAndDrop.itemBeingDragged.GetComponent<ApplyEdit>() != null){
+				
+				//Calls a function that will apply an edit to an instrument (AAJ)
+				//fooEditMode();
+				
+				//Test print
+				Debug.Log("Editing Mode");
+				
+				//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
+			}//if
+
 		}//if
 	}//OnDrop
 	#endregion
