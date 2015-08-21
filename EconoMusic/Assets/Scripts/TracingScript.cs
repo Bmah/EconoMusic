@@ -114,7 +114,7 @@ public class TracingScript : MonoBehaviour {
 		drawObject.GetComponent<DrawLine>().linePoints.Clear();
 
 		//Removes the line from the screen (AAJ)
-		drawObject.GetComponent<DrawLine>().UpdateLine();
+		drawObject.GetComponent<DrawLine>().UpdateLine(new List<Vector3>());
 
 		//Instantiates a line that can be used to trace a graph (AAJ)
 		GameObject newDrawObject = Instantiate(drawObject, new Vector3(-557.7203f,-226.53f,0), Quaternion.identity) as GameObject;
