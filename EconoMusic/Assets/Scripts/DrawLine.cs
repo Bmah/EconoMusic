@@ -65,7 +65,7 @@ public class DrawLine : MonoBehaviour
 				linePoints.Add (mouseWorld);
 				//Debug.Log ("Added: ");
 				//Debug.Log (mouseWorld);
-				UpdateLine ();
+				UpdateLine (linePoints);
 				flushed = true;
 			}
 		}
@@ -92,25 +92,25 @@ public class DrawLine : MonoBehaviour
 			lastPos = linePoints [lineCount - 1];
 			Debug.Log (lastPos);
 			//Debug.Log (linePoints[lineCount-1]);
-			UpdateLine();
+			UpdateLine(linePoints);
 		}
 	}
 
 
-	public void UpdateLine()
+	public void UpdateLine(List<Vector3> incoming)
 	{
 		//I need this function to public so that the line is
 		//updated off the screen when I clear linePoints (AAJ)
 
 		lineRenderer.SetWidth(startWidth, endWidth);
-		lineRenderer.SetVertexCount(linePoints.Count);
+		lineRenderer.SetVertexCount(incoming.Count);
 		
-		for(int i = lineCount; i < linePoints.Count; i++)
+		for(int i = lineCount; i < incoming.Count; i++)
 		{
-			lineRenderer.SetPosition(i, linePoints[i]);
+			lineRenderer.SetPosition(i, incoming[i]);
 
 		}
-		lineCount = linePoints.Count;
+		lineCount = incoming.Count;
 	}
 
 	void ToggleDraw() {
