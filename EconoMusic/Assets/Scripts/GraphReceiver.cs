@@ -40,21 +40,29 @@ public class GraphReceiver : MonoBehaviour, IDropHandler{
 			//Copies the image from the dragged item to the instruments graph image (AAJ)
 			GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
 
-			//Sets the tracing graphs sprite and enables the tracing screen (AAJ) 
-			tracingGraph.sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
-			tracingScreen.SetActive(true);
+			if(DragAndDrop.itemBeingDragged.GetComponent<LoadTexture>() != null){
+				
+				//Sets the tracing graphs sprite and enables the tracing screen (AAJ) 
+				tracingGraph.sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
+				tracingScreen.SetActive(true);
 
-			//Finds the DrawObject that will be used to trace the graph (AAJ)
-			drawObject = GameObject.FindGameObjectWithTag("Draw");
+				//Finds the DrawObject that will be used to trace the graph (AAJ)
+				drawObject = GameObject.FindGameObjectWithTag("Draw");
 
-			//Sets the DrawObject that will be used to trace the graph in the TracingScript (AAJ)
-			tracingScript.SetDrawObject(drawObject);
+				//Sets the DrawObject that will be used to trace the graph in the TracingScript (AAJ)
+				tracingScript.SetDrawObject(drawObject);
 
-			//Sets the name of the file (AAJ)
-			tracingScript.SetFileName(DragAndDrop.itemBeingDragged.GetComponent<LoadTexture>().fileName);
+				//Sets the name of the file (AAJ)
+				tracingScript.SetFileName(DragAndDrop.itemBeingDragged.GetComponent<LoadTexture>().fileName);
 
-			//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
-		}
-	}
+				//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
+			}//if
+			else{
+
+				//Test Print
+				Debug.Log("You are from an instrument!");
+			}//esle
+		}//if
+	}//OnDrop
 	#endregion
 }
