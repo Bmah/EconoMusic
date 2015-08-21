@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class ApplyEdit : MonoBehaviour, IDropHandler{
 
@@ -117,6 +118,9 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 		Transform graphSlot = DragAndDrop.itemBeingDragged.transform.parent;
 		Transform graphPanel = graphSlot.transform.parent;
 		Transform instrumentObject = graphPanel.transform.parent;
+
+		//Gives the DrawObject the raw data (AAJ)
+		DrawObject.GetComponent<DrawLine>().linePoints = new List<Vector3>(instrumentObject.GetComponent<InstrumentScript>().RawData);
 
 		//Updates the tracing screen with the editable line (AAJ)
 		DrawObject.GetComponent<DrawLine>().UpdateLine(instrumentObject.GetComponent<InstrumentScript>().RawData);
