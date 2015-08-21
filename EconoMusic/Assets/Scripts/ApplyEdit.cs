@@ -106,7 +106,7 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 	/// This will allow the user to edit existing instruments (AAJ)
 	/// </summary>
 	void EditMode(){
-
+		//Debug.Log ("here");
 		//Enables the tracing screen(AAJ)
 		tracingScreen.SetActive(true);
 
@@ -124,6 +124,8 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 
 		//Gives the DrawObject a last position (AAJ)
 		DrawObject.GetComponent<DrawLine>().lastPos = DrawObject.GetComponent<DrawLine>().linePoints[DrawObject.GetComponent<DrawLine>().linePoints.Count - 1];
+		DrawObject.GetComponent<DrawLine> ().flushed = true;
+		//Debug.Log (DrawObject.GetComponent<DrawLine>().lastPos);
 
 		//Updates the tracing screen with the editable line (AAJ)
 		DrawObject.GetComponent<DrawLine>().UpdateLine(instrumentObject.GetComponent<InstrumentScript>().RawData);
