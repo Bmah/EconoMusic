@@ -75,18 +75,21 @@ public class DrawLine : MonoBehaviour
 		}
 		//isRendered should prevent this part of the scirpt from deleting a line that isn't there (AAJ)
 		if(Input.GetKeyDown (KeyCode.LeftArrow)){
+			Debug.Log (lineCount);
+			UpdateLine (linePoints);
+			Debug.Log (lineCount);
 			if(lineCount == 0)
 				return;
 			linePoints.RemoveAt (lineCount - 1);
-			//Debug.Log ("before: ");
-			//Debug.Log (lineCount-1);
+			Debug.Log ("before: ");
+			Debug.Log (lineCount);
 			lineCount = lineCount - 1;
-			//Debug.Log (lineCount-1);
+			Debug.Log (lineCount-1);
 			if(lineCount == 0) {
 				lastPos = new Vector3(-30f,0,0);
-				Debug.Log (lastPos);
-				Debug.Log ("count of LinePos: ");
-				Debug.Log (linePoints.Count);
+				//Debug.Log (lastPos);
+				//Debug.Log ("count of LinePos: ");
+				//Debug.Log (linePoints.Count);
 				return;
 			}
 			lastPos = linePoints [lineCount - 1];
