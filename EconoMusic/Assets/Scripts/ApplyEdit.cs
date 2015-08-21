@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ApplyEdit : MonoBehaviour, IDropHandler{
 
@@ -40,6 +41,9 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 		if(!item){
 
 			if(DragAndDrop.itemBeingDragged.GetComponent<GraphReceiver>() != null){
+
+				//Copies the image from the dragged item to the instruments graph image (AAJ)
+				GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
 
 				//Calls a function that will apply an edit to an instrument (AAJ)
 				//fooEdit();

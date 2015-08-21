@@ -37,10 +37,10 @@ public class GraphReceiver : MonoBehaviour, IDropHandler{
 
 		if(!item){
 
-			if(DragAndDrop.itemBeingDragged.GetComponent<LoadTexture>() != null){
+			//Copies the image from the dragged item to the instruments graph image (AAJ)
+			GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
 
-				//Copies the image from the dragged item to the instruments graph image (AAJ)
-				GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
+			if(DragAndDrop.itemBeingDragged.GetComponent<LoadTexture>() != null){
 				
 				//Sets the tracing graphs sprite and enables the tracing screen (AAJ) 
 				tracingGraph.sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
