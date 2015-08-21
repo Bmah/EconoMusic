@@ -122,6 +122,9 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 		//Gives the DrawObject the raw data (AAJ)
 		DrawObject.GetComponent<DrawLine>().linePoints = new List<Vector3>(instrumentObject.GetComponent<InstrumentScript>().RawData);
 
+		//Gives the DrawObject a last position (AAJ)
+		DrawObject.GetComponent<DrawLine>().lastPos = DrawObject.GetComponent<DrawLine>().linePoints[DrawObject.GetComponent<DrawLine>().linePoints.Count - 1];
+
 		//Updates the tracing screen with the editable line (AAJ)
 		DrawObject.GetComponent<DrawLine>().UpdateLine(instrumentObject.GetComponent<InstrumentScript>().RawData);
 
