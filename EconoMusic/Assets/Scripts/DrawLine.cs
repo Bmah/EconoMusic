@@ -18,7 +18,7 @@ public class DrawLine : MonoBehaviour
 
 	//I made this variable public so I can use it in GraphReceiver and TracingScript (AAJ)
 	public bool drawing;//toggles left click drawing on and off
-	private bool flushed;//sets true after first point, to flush the garbage values
+	public bool flushed;//sets true after first point, to flush the garbage values
 	public float xThreshold = 0.001f;//controls minimum distance in x between two points
 
 	//I made this variable public so I can use it in TracingScript (AAJ)
