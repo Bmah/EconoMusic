@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InstrumentScript : MonoBehaviour {
 
 	public bool DebugMode;
+	public int instrumentNumber;
 
 	private AudioSource[] audioSources;
 	private bool useFirstAudioSource = true;
@@ -35,6 +36,7 @@ public class InstrumentScript : MonoBehaviour {
 	private SoundLibrary soundLibrary;
 	private TracingScript tracingScript;
 	private DrawLine drawLine;
+	public MasterInstrument masterInstrument;
 
 	Camera mainCamera;
 	// Use this for initialization
@@ -303,4 +305,12 @@ public class InstrumentScript : MonoBehaviour {
 		//Returns the normalized list of vector3's (AAJ)
 		return(normalized);
 	}//Normalize
+
+	/// <summary>
+	/// Delete this instance.
+	/// </summary>
+	public void Delete(){
+		masterInstrument.DeleteInstrument (instrumentNumber);
+		GameObject.Destroy(this.gameObject);
+	}
 }//InstrumentScript
