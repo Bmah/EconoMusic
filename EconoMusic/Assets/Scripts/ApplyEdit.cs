@@ -71,10 +71,11 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 			if(DragAndDrop.itemBeingDragged.GetComponent<GraphReceiver>() != null){
 
 				//Copies the image from the dragged item to the instruments graph image (AAJ)
-				GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
+				//GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
 
-				//Calls a function that will apply an edit to an instrument (AAJ)
-				//fooEdit();
+				//Applies an edit to an instrument (AAJ)
+				transform.parent.parent.GetComponentInParent<InstrumentScript>().
+					LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints());
 
 				//Test print
 				Debug.Log("Edit Applied");
@@ -88,7 +89,8 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 
 					if(isInstrument == false){
 
-						//Calls a function that will apply an edit to an instrument (AAJ)
+						//Calls a function that will will allow the user
+						//to edit an existing instrument (AAJ)
 						EditMode();
 					
 						//Test print
