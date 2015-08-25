@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InstrumentScript : MonoBehaviour {
 
 	public bool DebugMode;
+	public int instrumentNumber;
 
 	private AudioSource[] audioSources;
 	private bool useFirstAudioSource = true;
@@ -28,17 +29,26 @@ public class InstrumentScript : MonoBehaviour {
 	public Toggle LoopToggle;
 	public Slider TimeSlider;
 	public Image Graph;
-	
+
+	float yLocation,downYLocation;
+	float scrollSpeed = 1000f;
+	bool ShowInstrumentControls = true;
+	float scrollHeight = 520f;
+
 	public bool loop = false;
 	public bool play = false;
 	
 	private SoundLibrary soundLibrary;
 	private TracingScript tracingScript;
 	private DrawLine drawLine;
+	public MasterInstrument masterInstrument;
 
 	Camera mainCamera;
 	// Use this for initialization
 	void Start () {
+		yLocation = this.transform.GetChild (0).transform.position.y + scrollHeight;
+		downYLocation = yLocation - scrollHeight;
+
 		mainCamera = Camera.main;
 
 		audioSources = this.GetComponents<AudioSource> ();
@@ -59,7 +69,7 @@ public class InstrumentScript : MonoBehaviour {
 		}//if
 		else {
 			Debug.Log ("Nothing Found");
-		}
+		}//else
 
 		GameObject DrawObject = GameObject.FindGameObjectWithTag("Draw");
 		if (DrawObject != null) {
@@ -70,6 +80,8 @@ public class InstrumentScript : MonoBehaviour {
 		}//else
 
 		LoadDataForInstrument (tracingScript.GetSprite(),tracingScript.GetLinePoints());
+
+
 	}//Start
 	
 	// Update is called once per frame
@@ -99,6 +111,18 @@ public class InstrumentScript : MonoBehaviour {
 				audioSources[1].Stop();
 			}//else
 		}//if
+
+		if (ShowInstrumentControls && this.transform.GetChild(0).transform.position.y > downYLocation) {
+			for(int i = 0; i < this.transform.childCount; i++) {
+				this.transform.GetChild(i).transform.Translate(new Vector3(0,-scrollSpeed * ((this.transform.GetChild(0).transform.position.y - downYLocation)/scrollHeight),0)*Time.deltaTime);
+			}//foreach
+		}//if
+		else if(!ShowInstrumentControls && this.transform.GetChild(0).transform.position.y < yLocation){
+			for(int i = 0; i < this.transform.childCount; i++) {
+				this.transform.GetChild(i).transform.Translate(new Vector3(0,scrollSpeed * ((yLocation - this.transform.GetChild(0).transform.position.y)/scrollHeight),0)*Time.deltaTime);
+			}//foreach
+		}//else if
+
 	}//Update
 
 	/// <summary>
@@ -303,4 +327,26 @@ public class InstrumentScript : MonoBehaviour {
 		//Returns the normalized list of vector3's (AAJ)
 		return(normalized);
 	}//Normalize
+
+	/// <summary>
+	/// Delete this instance.
+	/// </summary>
+	public void Delete(){
+		masterInstrument.DeleteInstrument (instrumentNumber);
+		GameObject.Destroy(this.gameObject);
+	}
+
+	/// <summary>
+	/// Shows the controls.
+	/// </summary>
+	public void ShowControls(){
+		ShowInstrumentControls = true;
+	}//ShowControls
+
+	/// <summary>
+	/// Hides the controls.
+	/// </summary>
+	public void HideControls(){
+		ShowInstrumentControls = false;
+	}//HideControls
 }//InstrumentScript
