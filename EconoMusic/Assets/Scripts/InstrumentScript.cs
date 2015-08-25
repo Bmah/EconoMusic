@@ -43,7 +43,11 @@ public class InstrumentScript : MonoBehaviour {
 	private DrawLine drawLine;
 	public MasterInstrument masterInstrument;
 
+	//Holds the image for the instrument (AAJ)
+	public GameObject graphImage;
+
 	Camera mainCamera;
+
 	// Use this for initialization
 	void Start () {
 		yLocation = this.transform.GetChild (0).transform.position.y + scrollHeight;
@@ -112,7 +116,7 @@ public class InstrumentScript : MonoBehaviour {
 			}//else
 		}//if
 
-		if (ShowInstrumentControls && this.transform.GetChild(0).transform.position.y > downYLocation) {
+		if(ShowInstrumentControls && this.transform.GetChild(0).transform.position.y > downYLocation) {
 			for(int i = 0; i < this.transform.childCount; i++) {
 				this.transform.GetChild(i).transform.Translate(new Vector3(0,-scrollSpeed * ((this.transform.GetChild(0).transform.position.y - downYLocation)/scrollHeight),0)*Time.deltaTime);
 			}//foreach
@@ -121,6 +125,14 @@ public class InstrumentScript : MonoBehaviour {
 			for(int i = 0; i < this.transform.childCount; i++) {
 				this.transform.GetChild(i).transform.Translate(new Vector3(0,scrollSpeed * ((yLocation - this.transform.GetChild(0).transform.position.y)/scrollHeight),0)*Time.deltaTime);
 			}//foreach
+
+			//Hides the instruments image so it cannot be interacted with (AAJ)
+			//graphImage.SetActive(false);
+		}//else if
+		else if(true){
+
+			//Reveals the instruments image so it can be interacted with (AAJ)
+			graphImage.SetActive(true);
 		}//else if
 
 	}//Update
@@ -337,16 +349,17 @@ public class InstrumentScript : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Shows the controls.
+	/// Toggles the controls. (AAJ)
 	/// </summary>
-	public void ShowControls(){
-		ShowInstrumentControls = true;
-	}//ShowControls
-
-	/// <summary>
-	/// Hides the controls.
-	/// </summary>
-	public void HideControls(){
-		ShowInstrumentControls = false;
-	}//HideControls
+	public void ToggleControls(){
+		
+		if(ShowInstrumentControls == true){
+			
+			ShowInstrumentControls = false;
+		}//if
+		else{
+			
+			ShowInstrumentControls = true;
+		}//else
+	}//ToggleControls
 }//InstrumentScript
