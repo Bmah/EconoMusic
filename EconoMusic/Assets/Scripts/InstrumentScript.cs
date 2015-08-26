@@ -43,7 +43,7 @@ public class InstrumentScript : MonoBehaviour {
 	private DrawLine drawLine;
 	public MasterInstrument masterInstrument;
 	public GameObject drawObject;
-	private GameObject graphSuspended;
+	public GameObject graphSuspended;
 	//Holds the image for the instrument (AAJ)
 	public GameObject graphImage;
 
@@ -350,6 +350,7 @@ public class InstrumentScript : MonoBehaviour {
 	/// </summary>
 	public void Delete(){
 		masterInstrument.DeleteInstrument (instrumentNumber);
+		GameObject.Destroy (graphSuspended);
 		GameObject.Destroy(this.gameObject);
 	}
 

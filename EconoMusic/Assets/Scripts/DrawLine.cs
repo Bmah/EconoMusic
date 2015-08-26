@@ -26,6 +26,7 @@ public class DrawLine : MonoBehaviour
 	//public float performanceSeconds;
 	public float noteTimesTest = 1f;
 	public GameObject test;
+	public bool beingEdited;
 
 	void Awake()
 	{
@@ -36,6 +37,7 @@ public class DrawLine : MonoBehaviour
 		//I am restricting when you can draw (AAJ)
 		drawing = false;
 		flushed = false;
+		beingEdited = false;
 	}
 	
 	void Update()
@@ -75,7 +77,7 @@ public class DrawLine : MonoBehaviour
 			//ToggleDraw();
 		}
 		//isRendered should prevent this part of the scirpt from deleting a line that isn't there (AAJ)
-		if(Input.GetKeyDown (KeyCode.LeftArrow)){
+		if(Input.GetKeyDown (KeyCode.LeftArrow) && beingEdited){
 			//Debug.Log (lineCount);
 			UpdateLine (linePoints);
 			//Debug.Log (lineCount);
