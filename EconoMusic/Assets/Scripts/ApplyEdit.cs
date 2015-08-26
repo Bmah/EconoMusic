@@ -79,6 +79,12 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 
 				//Test print
 				Debug.Log("Edit Applied");
+				//updates the overlayed graph image once the edit has been applied
+				transform.parent.parent.GetComponentInParent<InstrumentScript>().graphSuspended.
+					GetComponent<DrawLine>().UpdateLine(transform.parent.parent.GetComponentInParent
+					                                    <InstrumentScript>().RawData);
+				transform.parent.parent.GetComponentInParent<InstrumentScript> ().graphSuspended.
+					GetComponent<DrawLine>().beingEdited = false;
 
 				//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
 			}//if
@@ -137,6 +143,9 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 
 		//Copies the instruments sprite to the tracing screen (AAJ)
 		tracingGraph.sprite = GetComponent<Image>().sprite;
+		graphPanel.transform.parent.GetComponentInParent<InstrumentScript> ().graphSuspended.
+			GetComponent<DrawLine> ().beingEdited = true;
+		DrawObject.GetComponent<DrawLine> ().beingEdited = true;
 
 		//Passes the name of the image to the tracing script(AAJ)
 		//Instrument scirpt needs to updated to hold the image's name (AAJ)

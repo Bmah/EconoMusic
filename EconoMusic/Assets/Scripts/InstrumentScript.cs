@@ -43,7 +43,7 @@ public class InstrumentScript : MonoBehaviour {
 	private DrawLine drawLine;
 	public MasterInstrument masterInstrument;
 	public GameObject drawObject;
-	private GameObject graphSuspended;
+	public GameObject graphSuspended;
 	//Holds the image for the instrument (AAJ)
 	public GameObject graphImage;
 
@@ -89,6 +89,23 @@ public class InstrumentScript : MonoBehaviour {
 		}//else
 
 		LoadDataForInstrument (tracingScript.GetSprite(),tracingScript.GetLinePoints());
+		/*switch (instrumentNumber) {
+		case 0:
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material.color = Color.black;
+			break;
+		case 1:
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material.SetColor = Color.blue;
+			break;
+		case 2:
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material.SetColor = Color.red;
+			break;
+		case 3:
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material.SetColor = Color.green;
+			break;
+		case 4:
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material.SetColor = Color.white;
+			break;
+		}*/
 		graphSuspended.GetComponent<DrawLine> ().UpdateLine (RawData);
 
 	}//Start
@@ -350,6 +367,7 @@ public class InstrumentScript : MonoBehaviour {
 	/// </summary>
 	public void Delete(){
 		masterInstrument.DeleteInstrument (instrumentNumber);
+		GameObject.Destroy (graphSuspended);
 		GameObject.Destroy(this.gameObject);
 	}
 

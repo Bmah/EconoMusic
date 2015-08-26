@@ -34,6 +34,7 @@ public class TracingScript : MonoBehaviour {
 		//disables the the tracing screen at the start of
 		//the game in case someone accidentally enables it (AAJ)
 		tracingScreen.SetActive(false);
+		Debug.Log ("here");
 	}//Start
 
 	/// <summary>
@@ -80,6 +81,7 @@ public class TracingScript : MonoBehaviour {
 
 			//Enables the tracing (AAJ)
 			drawObject.GetComponent<DrawLine>().drawing = true;
+			drawObject.GetComponent<DrawLine>().beingEdited = true;
 		}//if
 	}//DrawingOn
 
@@ -119,6 +121,8 @@ public class TracingScript : MonoBehaviour {
 		//Instantiates a line that can be used to trace a graph (AAJ)
 		GameObject newDrawObject = Instantiate(drawObject, new Vector3(-557.7203f,-226.53f,0), Quaternion.identity) as GameObject;
 		newDrawObject.transform.SetParent(tracingScreen.transform, true);
+		drawObject.GetComponent<DrawLine> ().beingEdited = false;
+
 
 		//Destroys the previous line (AAJ)
 		Destroy(drawObject);
