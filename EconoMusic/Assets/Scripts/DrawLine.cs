@@ -9,7 +9,7 @@ public class DrawLine : MonoBehaviour
 {
 	//I made this variable public so I can use it in TracingScript (AAJ)
 	public List<Vector3> linePoints = new List<Vector3>();
-	LineRenderer lineRenderer;//draws the line
+	public LineRenderer lineRenderer;//draws the line
 	public float startWidth = 1.0f;//width of the line, adjustable
 	public float endWidth = 1.0f;//width of the line, match it with start
 	public float threshold = 0.001f;//distance between notes
@@ -31,7 +31,8 @@ public class DrawLine : MonoBehaviour
 	{
 		thisCamera = Camera.main;
 		lineRenderer = GetComponent<LineRenderer>();
-
+		if (lineRenderer != null)
+			Debug.Log ("aaaaaaaaaaaaaa");
 		//I am restricting when you can draw (AAJ)
 		drawing = false;
 		flushed = false;

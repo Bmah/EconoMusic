@@ -42,14 +42,19 @@ public class InstrumentScript : MonoBehaviour {
 	private TracingScript tracingScript;
 	private DrawLine drawLine;
 	public MasterInstrument masterInstrument;
-
+	public GameObject drawObject;
+	private GameObject graphSuspended;
 	//Holds the image for the instrument (AAJ)
 	public GameObject graphImage;
 
 	Camera mainCamera;
 
 	// Use this for initialization
+
 	void Start () {
+		graphSuspended = Instantiate (drawObject, this.transform.position, this.transform.rotation) as GameObject;
+		graphSuspended.GetComponent<DrawLine> ().drawing = false;
+		graphSuspended.GetComponent<DrawLine> ().lineRenderer = graphSuspended.GetComponent<LineRenderer> ();
 		yLocation = this.transform.GetChild (0).transform.position.y + scrollHeight;
 		downYLocation = yLocation - scrollHeight;
 
@@ -84,7 +89,7 @@ public class InstrumentScript : MonoBehaviour {
 		}//else
 
 		LoadDataForInstrument (tracingScript.GetSprite(),tracingScript.GetLinePoints());
-
+		graphSuspended.GetComponent<DrawLine> ().UpdateLine (RawData);
 
 	}//Start
 	
