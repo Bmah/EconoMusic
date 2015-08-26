@@ -51,6 +51,7 @@ public class GraphReceiver : MonoBehaviour, IDropHandler{
 
 				//Sets the DrawObject that will be used to trace the graph in the TracingScript (AAJ)
 				tracingScript.SetDrawObject(drawObject);
+				drawObject.GetComponent<DrawLine>().beingEdited = true;
 
 				//Sets the name of the file (AAJ)
 				tracingScript.SetFileName(DragAndDrop.itemBeingDragged.GetComponent<LoadTexture>().fileName);
