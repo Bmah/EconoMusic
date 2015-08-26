@@ -35,14 +35,20 @@ public class LoadTexture : MonoBehaviour{
 	//Holds a button that will delete a loaded texture (AAJ)
 	public GameObject deleteButton;
 
+	//Holds the text box for displaying the images file name (AAJ)
+	public Text fileNameText;
+
 	// Use this for initialization
 	void Start ()
 	{
-		//resets the loaded variable for new instantiations of slot (AAJ)
+		//Resets the loaded variable for new instantiations of slot (AAJ)
 		loaded = false;
 
-		//sets the texture to the default image when it is generated (AAJ)
+		//Sets the texture to the default image when it is generated (AAJ)
 		GetComponent<Image>().sprite = defaultPlusImage;
+
+		//Clears the textures text box (AAJ)
+		fileNameText.text = "";
 
 	}//Start
 
@@ -101,6 +107,9 @@ public class LoadTexture : MonoBehaviour{
 		//Prevents multiple textures being loaded onto the same object
 		//but only once something has been loaded (AAJ)
 		loaded = true;
+
+		//Puts the file name on the images' text component (AAJ)
+		fileNameText.text = fileName;
 
 		//Gets the sprite from the file path (AAJ)
 		byte[] bytes = System.IO.File.ReadAllBytes(filePath);
