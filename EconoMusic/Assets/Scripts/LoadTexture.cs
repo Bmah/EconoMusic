@@ -38,6 +38,9 @@ public class LoadTexture : MonoBehaviour{
 	//Holds the text box for displaying the images file name (AAJ)
 	public Text fileNameText;
 
+	//Holds the master insturment so it can be enabled (AAJ)
+	private GameObject[] instruments;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -73,17 +76,32 @@ public class LoadTexture : MonoBehaviour{
 
 				browser.Show(path, searchPatterns, this, mode);
 			}
-		}
+		
+			//Finds the instruments (AAJ)
+			instruments = GameObject.FindGameObjectsWithTag("Instrument");
+			
+			//Moves any instruments that were moved up back down (AAJ)
+			for(int i = 0; i < instruments.Length; i++){
+				
+				instruments[i].GetComponent<InstrumentScript>().MoveInsturmentUp();
+			}//for
+		}//if
 	}//OnMouseDown
 	
 	// The FileBrowser will send a message to this MonoBehaviour when the user selects a file
 	// Set the 'SelectEventName' in the inspector to the name of the function you want to receive the message
 	void OnFileSelected(FileInfo info){
 			
-			sel = info;
+		sel = info;
 			
-			//Loads in the texture (AAJ)
-			load(sel.path);
+		//Loads in the texture (AAJ)
+		load(sel.path);
+			
+		//Moves any instruments that were moved up back down (AAJ)
+		for(int i = 0; i < instruments.Length; i++){
+			
+			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentDown();
+		}//for
 	}//OnFileSelected
 	
 	void OnFileChange(FileInfo file){
@@ -95,6 +113,12 @@ public class LoadTexture : MonoBehaviour{
 	}//OnFileChange
 	
 	void OnBrowseCancel(){
+
+		//Moves any instruments that were moved up back down (AAJ)
+		for(int i = 0; i < instruments.Length; i++){
+			
+			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentDown();
+		}//for
 
 		Debug.Log("You have cancelled");
 	}//OnBrowseCancel
