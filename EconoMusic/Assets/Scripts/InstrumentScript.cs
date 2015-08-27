@@ -39,16 +39,17 @@ public class InstrumentScript : MonoBehaviour {
 	//Holds the previous position that child 0 was located at (AAJ)
 	float previousPosition;
 	float yLocation,downYLocation;
-	float scrollSpeed = 4000f;
+	float scrollSpeed = 1000f;
 	bool ShowInstrumentControls = true;
-	float scrollHeight = 570f;
+	bool instrumentMoved = false;
+	float scrollHeight = 520f;
 
 	public bool loop = false;
 	public bool play = false;
 	
 	private SoundLibrary soundLibrary;
 	private TracingScript tracingScript;
-	private DrawLine drawLine;
+	//private DrawLine drawLine;
 	public MasterInstrument masterInstrument;
 	public GameObject drawObject;
 	public GameObject graphSuspended;
@@ -90,7 +91,7 @@ public class InstrumentScript : MonoBehaviour {
 		else {
 			Debug.Log ("Nothing Found");
 		}//else
-
+		/*
 		GameObject DrawObject = GameObject.FindGameObjectWithTag("Draw");
 		if (DrawObject != null) {
 			drawLine = DrawObject.GetComponent<DrawLine> ();
@@ -98,7 +99,7 @@ public class InstrumentScript : MonoBehaviour {
 		else {
 			Debug.Log ("Did not find object tagged Draw");
 		}//else
-
+		*/
 		LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints(),tracingScript.GetFileName());
 		/*switch (instrumentNumber) {
 		case 0:
@@ -409,4 +410,28 @@ public class InstrumentScript : MonoBehaviour {
 			ShowInstrumentControls = true;
 		}//else
 	}//ToggleControls
+
+	/// <summary>
+	/// Moves the insturment up when a line has been traced(AAJ)
+	/// </summary>
+	public void MoveInsturmentUp(){
+		
+		if(ShowInstrumentControls == true){
+
+			ShowInstrumentControls = false;
+			instrumentMoved = true;
+		}//if
+	}//MoveInsturmentUp
+
+	/// <summary>
+	/// Moves the insturment down once tracing is finished (AAJ)
+	/// </summary>
+	public void MoveInsturmentDown(){
+
+		if(instrumentMoved == true){
+
+			ShowInstrumentControls = true;
+			instrumentMoved = false;
+		}//if
+	}//MoveInstrumentDown
 }//InstrumentScript
