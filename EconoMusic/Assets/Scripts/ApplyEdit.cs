@@ -75,7 +75,7 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 
 				//Applies an edit to an instrument (AAJ)
 				transform.parent.parent.GetComponentInParent<InstrumentScript>().
-					LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints());
+					LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints(),tracingScript.GetFileName());
 
 				//Test print
 				Debug.Log("Edit Applied");
@@ -149,6 +149,6 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 
 		//Passes the name of the image to the tracing script(AAJ)
 		//Instrument scirpt needs to updated to hold the image's name (AAJ)
-		//tracingScript.SetFileName();
+		tracingScript.SetFileName(DragAndDrop.itemBeingDragged.transform.parent.parent.parent.GetComponent<InstrumentScript>().fileName);
 	}//EditMode
 }//ApplyEdit
