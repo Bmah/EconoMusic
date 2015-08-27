@@ -16,6 +16,12 @@ public class InstrumentScript : MonoBehaviour {
 
 	public float volume;
 
+	//Holds the name of the file so ApplyEdit can get it(AAJ)
+	public string fileName;
+
+	//Holds the text box that displays the file name on the screen (AAJ)
+	public Text fileNameText;
+
 	public List<Vector3> RawData;
 	public List<float> Notes;
 	private int currentNote = 0;
@@ -88,7 +94,7 @@ public class InstrumentScript : MonoBehaviour {
 			Debug.Log ("Did not find object tagged Draw");
 		}//else
 
-		LoadDataForInstrument (tracingScript.GetSprite(),tracingScript.GetLinePoints());
+		LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints(),tracingScript.GetFileName());
 		/*switch (instrumentNumber) {
 		case 0:
 			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material.color = Color.black;
@@ -264,12 +270,17 @@ public class InstrumentScript : MonoBehaviour {
 	/// </summary>
 	/// <param name="GraphImage">Graph image.</param>
 	/// <param name="GraphData">Graph data.</param>
-	public void LoadDataForInstrument(Sprite GraphImage, List<Vector3> GraphData){
+	public void LoadDataForInstrument(Sprite GraphImage, List<Vector3> GraphData, string fileName){
 		Notes = new List<float>();
 		float max = GraphData[0].y;
 		float min = GraphData[0].y;
 		Graph.sprite = GraphImage;
 		RawData = new List<Vector3>(GraphData);
+		//Indirectly gets the file name from Tracing Scripts getter function (AAJ)
+		this.fileName = fileName;
+
+		//Updates the file name text box (AAJ)
+		fileNameText.text = fileName;
 
 		GraphData = Normalize (PerformanceLength, GraphData);
 		Debug.Log (Instrument.length);
