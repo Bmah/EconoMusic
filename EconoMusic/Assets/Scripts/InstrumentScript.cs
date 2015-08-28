@@ -16,6 +16,12 @@ public class InstrumentScript : MonoBehaviour {
 
 	public float volume;
 
+	//Holds the name of the file so ApplyEdit can get it(AAJ)
+	public string fileName;
+
+	//Holds the text box that displays the file name on the screen (AAJ)
+	public Text fileNameText;
+
 	public List<Vector3> RawData;
 	public List<float> Notes;
 	private int currentNote = 0;
@@ -30,9 +36,12 @@ public class InstrumentScript : MonoBehaviour {
 	public Slider TimeSlider;
 	public Image Graph;
 
+	//Holds the previous position that child 0 was located at (AAJ)
+	float previousPosition;
 	float yLocation,downYLocation;
 	float scrollSpeed = 1000f;
 	bool ShowInstrumentControls = true;
+	bool instrumentMoved = false;
 	float scrollHeight = 520f;
 
 	public bool loop = false;
@@ -40,18 +49,31 @@ public class InstrumentScript : MonoBehaviour {
 	
 	private SoundLibrary soundLibrary;
 	private TracingScript tracingScript;
-	private DrawLine drawLine;
+	//private DrawLine drawLine;
 	public MasterInstrument masterInstrument;
-
+	public GameObject drawObject;
+	public GameObject graphSuspended;
 	//Holds the image for the instrument (AAJ)
 	public GameObject graphImage;
+	public Material Mat1;
+	public Material Mat2;
+	public Material Mat3;
+	public Material Mat4;
+	public Material Mat5;
 
 	Camera mainCamera;
 
 	// Use this for initialization
+
 	void Start () {
+		graphSuspended = Instantiate (drawObject, this.transform.position, this.transform.rotation) as GameObject;
+		graphSuspended.GetComponent<DrawLine> ().drawing = false;
+		graphSuspended.GetComponent<DrawLine> ().lineRenderer = graphSuspended.GetComponent<LineRenderer> ();
 		yLocation = this.transform.GetChild (0).transform.position.y + scrollHeight;
 		downYLocation = yLocation - scrollHeight;
+
+		//Inititalizes previous position with the start postition (AAJ)
+		previousPosition = transform.GetChild(0).transform.position.y;
 
 		mainCamera = Camera.main;
 
@@ -74,7 +96,7 @@ public class InstrumentScript : MonoBehaviour {
 		else {
 			Debug.Log ("Nothing Found");
 		}//else
-
+		/*
 		GameObject DrawObject = GameObject.FindGameObjectWithTag("Draw");
 		if (DrawObject != null) {
 			drawLine = DrawObject.GetComponent<DrawLine> ();
@@ -82,14 +104,15 @@ public class InstrumentScript : MonoBehaviour {
 		else {
 			Debug.Log ("Did not find object tagged Draw");
 		}//else
+		*/
+		LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints(),tracingScript.GetFileName());
 
-		LoadDataForInstrument (tracingScript.GetSprite(),tracingScript.GetLinePoints());
-
-
+		graphSuspended.GetComponent<DrawLine> ().UpdateLine (RawData);
 	}//Start
 	
 	// Update is called once per frame
 	void Update () {
+		ColorSet ();
 		noteValue = TempoSlider.value;
 		volume = VolumeSlider.value;
 		audioSources[0].volume = volume;
@@ -117,23 +140,32 @@ public class InstrumentScript : MonoBehaviour {
 		}//if
 
 		if(ShowInstrumentControls && this.transform.GetChild(0).transform.position.y > downYLocation) {
-			for(int i = 0; i < this.transform.childCount; i++) {
+
+			for(int i = 0; i < this.transform.childCount; i++){
 				this.transform.GetChild(i).transform.Translate(new Vector3(0,-scrollSpeed * ((this.transform.GetChild(0).transform.position.y - downYLocation)/scrollHeight),0)*Time.deltaTime);
+			
 			}//foreach
+
+			//If the instrument is moving hide the image, other wise, show it
+			if(previousPosition == transform.GetChild(0).transform.position.y){
+				
+				//Reveals the instruments image so it can be interacted with (AAJ)
+				graphImage.SetActive(true);
+			}//if
 		}//if
 		else if(!ShowInstrumentControls && this.transform.GetChild(0).transform.position.y < yLocation){
-			for(int i = 0; i < this.transform.childCount; i++) {
+
+			for(int i = 0; i < this.transform.childCount; i++){
+			
 				this.transform.GetChild(i).transform.Translate(new Vector3(0,scrollSpeed * ((yLocation - this.transform.GetChild(0).transform.position.y)/scrollHeight),0)*Time.deltaTime);
 			}//foreach
 
 			//Hides the instruments image so it cannot be interacted with (AAJ)
-			//graphImage.SetActive(false);
+			graphImage.SetActive(false);
 		}//else if
-		else if(true){
 
-			//Reveals the instruments image so it can be interacted with (AAJ)
-			graphImage.SetActive(true);
-		}//else if
+		//Updates previousPosition with the last place the child 0 was located (AAJ)
+		previousPosition = transform.GetChild (0).transform.position.y;
 
 	}//Update
 
@@ -242,12 +274,17 @@ public class InstrumentScript : MonoBehaviour {
 	/// </summary>
 	/// <param name="GraphImage">Graph image.</param>
 	/// <param name="GraphData">Graph data.</param>
-	public void LoadDataForInstrument(Sprite GraphImage, List<Vector3> GraphData){
+	public void LoadDataForInstrument(Sprite GraphImage, List<Vector3> GraphData, string fileName){
 		Notes = new List<float>();
 		float max = GraphData[0].y;
 		float min = GraphData[0].y;
 		Graph.sprite = GraphImage;
 		RawData = new List<Vector3>(GraphData);
+		//Indirectly gets the file name from Tracing Scripts getter function (AAJ)
+		this.fileName = fileName;
+
+		//Updates the file name text box (AAJ)
+		fileNameText.text = fileName;
 
 		GraphData = Normalize (PerformanceLength, GraphData);
 		Debug.Log (Instrument.length);
@@ -345,6 +382,7 @@ public class InstrumentScript : MonoBehaviour {
 	/// </summary>
 	public void Delete(){
 		masterInstrument.DeleteInstrument (instrumentNumber);
+		GameObject.Destroy (graphSuspended);
 		GameObject.Destroy(this.gameObject);
 	}
 
@@ -362,4 +400,58 @@ public class InstrumentScript : MonoBehaviour {
 			ShowInstrumentControls = true;
 		}//else
 	}//ToggleControls
+
+	/// <summary>
+	/// Moves the insturment up when a line has been traced(AAJ)
+	/// </summary>
+	public void MoveInsturmentUp(){
+		
+		if(ShowInstrumentControls == true){
+
+			ShowInstrumentControls = false;
+			instrumentMoved = true;
+		}//if
+	}//MoveInsturmentUp
+
+	/// <summary>
+	/// Moves the insturment down once tracing is finished (AAJ)
+	/// </summary>
+	public void MoveInsturmentDown(){
+
+		if(instrumentMoved == true){
+
+			ShowInstrumentControls = true;
+			instrumentMoved = false;
+		}//if
+	}//MoveInstrumentDown
+
+	public void ColorSet() {
+		switch (instrumentNumber) {
+		case 0:
+			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat1)
+				break;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat1;
+			break;
+		case 1:
+			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat2)
+				break;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat2;
+			break;
+		case 2:
+			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat3)
+				break;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat3;
+			break;
+		case 3:
+			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat4)
+				break;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat4;
+			break;
+		case 4:
+			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat5)
+				return;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat5;
+			break;
+		}
+	}//ColorSet
 }//InstrumentScript

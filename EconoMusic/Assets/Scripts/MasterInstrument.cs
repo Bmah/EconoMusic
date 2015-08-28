@@ -82,7 +82,7 @@ public class MasterInstrument : MonoBehaviour {
 		if (Instruments.Count < 5) {
 			offset += 200;
 			GameObject NewInstrument = Instantiate (InstrumentTemplate, new Vector3 (offset, this.transform.position.y, 0), Quaternion.identity) as GameObject;
-			NewInstrument.transform.parent = this.transform;
+			NewInstrument.transform.SetParent(this.transform);
 			NewInstrument.GetComponent<InstrumentScript>().masterInstrument = this;
 			NewInstrument.GetComponent<InstrumentScript>().instrumentNumber = Instruments.Count;
 			Instruments.Add (NewInstrument.GetComponent<InstrumentScript> ());
@@ -93,7 +93,7 @@ public class MasterInstrument : MonoBehaviour {
 	/// 
 	/// </summary>
 	public void DeleteInstrument(int index){
-		InstrumentScript temp = Instruments [index];
+		//InstrumentScript temp = Instruments [index];
 		Instruments.RemoveAt (index);
 		offset -= 200;
 		for (int i = index; i < Instruments.Count; i++) {

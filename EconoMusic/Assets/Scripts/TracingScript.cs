@@ -28,12 +28,17 @@ public class TracingScript : MonoBehaviour {
 	//Holds the name of the file so it can be used to display on an instrument (AAJ)
 	private string fileName;
 
+	//Holds the master insturment so it can be enabled (AAJ)
+	private GameObject[] instruments;
+
 	// Use this for initialization
 	void Start(){
 
 		//disables the the tracing screen at the start of
 		//the game in case someone accidentally enables it (AAJ)
 		tracingScreen.SetActive(false);
+		//Debug.Log ("here");
+
 	}//Start
 
 	/// <summary>
@@ -80,6 +85,7 @@ public class TracingScript : MonoBehaviour {
 
 			//Enables the tracing (AAJ)
 			drawObject.GetComponent<DrawLine>().drawing = true;
+			drawObject.GetComponent<DrawLine>().beingEdited = true;
 		}//if
 	}//DrawingOn
 
@@ -101,6 +107,15 @@ public class TracingScript : MonoBehaviour {
 	/// </summary>
 	public void ConfirmTrace(){
 
+		//Finds the instruments (AAJ)
+		instruments = GameObject.FindGameObjectsWithTag("Instrument");
+
+		//Moves any instruments that were moved up back down (AAJ)
+		for(int i = 0; i < instruments.Length; i++){
+
+			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentDown();
+		}//for
+
 		//Disables the tracing when the confirm button is pressed (AAJ)
 		drawObject.GetComponent<DrawLine>().drawing = false;
 
@@ -119,6 +134,8 @@ public class TracingScript : MonoBehaviour {
 		//Instantiates a line that can be used to trace a graph (AAJ)
 		GameObject newDrawObject = Instantiate(drawObject, new Vector3(-557.7203f,-226.53f,0), Quaternion.identity) as GameObject;
 		newDrawObject.transform.SetParent(tracingScreen.transform, true);
+		drawObject.GetComponent<DrawLine> ().beingEdited = false;
+
 
 		//Destroys the previous line (AAJ)
 		Destroy(drawObject);
