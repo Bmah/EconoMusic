@@ -28,6 +28,9 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 	//traced or edited (AAJ)
 	private GameObject DrawObject;
 
+	//Holds the master insturment so it can be disabled (AAJ)
+	private GameObject[] instruments;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -46,7 +49,7 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 		tracingScript = tracingManager.GetComponent<TracingScript>();
 		tracingScreen = tracingScript.tracingScreen;
 		tracingGraph = tracingScript.tracingGraph;
-
+		
 	}//Start
 
 	//Returns the first child (AAJ)
@@ -75,10 +78,10 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 
 				//Applies an edit to an instrument (AAJ)
 				transform.parent.parent.GetComponentInParent<InstrumentScript>().
-					LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints());
+					LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints(),tracingScript.GetFileName());
 
 				//Test print
-				Debug.Log("Edit Applied");
+				//Debug.Log("Edit Applied");
 				//updates the overlayed graph image once the edit has been applied
 				transform.parent.parent.GetComponentInParent<InstrumentScript>().graphSuspended.
 					GetComponent<DrawLine>().UpdateLine(transform.parent.parent.GetComponentInParent
@@ -100,7 +103,7 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 						EditMode();
 					
 						//Test print
-						Debug.Log("Editing Mode");
+						//Debug.Log("Editing Mode");
 					
 						//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
 					}
@@ -149,6 +152,15 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 
 		//Passes the name of the image to the tracing script(AAJ)
 		//Instrument scirpt needs to updated to hold the image's name (AAJ)
-		//tracingScript.SetFileName();
+		tracingScript.SetFileName(DragAndDrop.itemBeingDragged.transform.parent.parent.parent.GetComponent<InstrumentScript>().fileName);
+
+		//Finds the instruments (AAJ)
+		instruments = GameObject.FindGameObjectsWithTag("Instrument");
+		
+		//Moves any instruments that were moved up back down (AAJ)
+		for(int i = 0; i < instruments.Length; i++){
+
+			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentUp();
+		}//for
 	}//EditMode
 }//ApplyEdit
