@@ -15,7 +15,11 @@ public class GraphReceiver : MonoBehaviour, IDropHandler{
 	//Holds the tracing graph so it can be given the graph (AAJ)
 	public Image tracingGraph;
 
+	//Holds a draw object to pass to the Tracing Script (AAJ)
 	private GameObject drawObject;
+
+	//Holds the master insturment so it can be disabled (AAJ)
+	private GameObject[] instruments;
 
 	//returns the first child (AAJ)
 	public GameObject item{
@@ -51,17 +55,27 @@ public class GraphReceiver : MonoBehaviour, IDropHandler{
 
 				//Sets the DrawObject that will be used to trace the graph in the TracingScript (AAJ)
 				tracingScript.SetDrawObject(drawObject);
+				drawObject.GetComponent<DrawLine>().beingEdited = true;
 
 				//Sets the name of the file (AAJ)
 				tracingScript.SetFileName(DragAndDrop.itemBeingDragged.GetComponent<LoadTexture>().fileName);
 
+				//Finds the instruments (AAJ)
+				instruments = GameObject.FindGameObjectsWithTag("Instrument");
+				
+				//Moves any instruments that were moved up back down (AAJ)
+				for(int i = 0; i < instruments.Length; i++){
+
+					instruments[i].GetComponent<InstrumentScript>().MoveInsturmentUp();
+				}//for
+
 				//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
 			}//if
-			else{
+			/*else{
 
 				//Test Print
 				Debug.Log("You are from an instrument!");
-			}//esle
+			}//esle*/
 		}//if
 	}//OnDrop
 	#endregion
