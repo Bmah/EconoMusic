@@ -55,6 +55,11 @@ public class InstrumentScript : MonoBehaviour {
 	public GameObject graphSuspended;
 	//Holds the image for the instrument (AAJ)
 	public GameObject graphImage;
+	public Material Mat1;
+	public Material Mat2;
+	public Material Mat3;
+	public Material Mat4;
+	public Material Mat5;
 
 	Camera mainCamera;
 
@@ -101,23 +106,23 @@ public class InstrumentScript : MonoBehaviour {
 		}//else
 		*/
 		LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints(),tracingScript.GetFileName());
-		/*switch (instrumentNumber) {
+		switch (instrumentNumber) {
 		case 0:
-			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material.color = Color.black;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat1;
 			break;
 		case 1:
-			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material.SetColor = Color.blue;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat2;
 			break;
 		case 2:
-			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material.SetColor = Color.red;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat3;
 			break;
 		case 3:
-			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material.SetColor = Color.green;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat4;
 			break;
 		case 4:
-			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material.SetColor = Color.white;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat5;
 			break;
-		}*/
+		}
 		graphSuspended.GetComponent<DrawLine> ().UpdateLine (RawData);
 	}//Start
 	
