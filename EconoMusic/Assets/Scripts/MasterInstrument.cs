@@ -86,6 +86,11 @@ public class MasterInstrument : MonoBehaviour {
 			NewInstrument.GetComponent<InstrumentScript>().masterInstrument = this;
 			NewInstrument.GetComponent<InstrumentScript>().instrumentNumber = Instruments.Count;
 			Instruments.Add (NewInstrument.GetComponent<InstrumentScript> ());
+
+			//updates the number of instruments in each instrument
+			for(int i = 0; i < Instruments.Count; i++){
+				Instruments[i].GetComponent<InstrumentScript>().NumberOfInstruments = Instruments.Count;
+			}
 		}//if
 	}//NewInstrument
 
@@ -100,5 +105,10 @@ public class MasterInstrument : MonoBehaviour {
 			Instruments[i].transform.position = new Vector3(Instruments[i].transform.position.x - 200, Instruments[i].transform.position.y, Instruments[i].transform.position.z);
 			Instruments[i].instrumentNumber -= 1;
 		}//for
+
+		//updates the number of instruments in each instrument
+		for(int i = 0; i < Instruments.Count; i++){
+			Instruments[i].GetComponent<InstrumentScript>().NumberOfInstruments = Instruments.Count;
+		}
 	}//Delete Instrument
 }//MasterInstrument
