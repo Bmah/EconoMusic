@@ -15,6 +15,7 @@ public class InstrumentScript : MonoBehaviour {
 	int NumberOfNotes;
 
 	public float volume;
+	public float NumberOfInstruments = 1;
 
 	//Holds the name of the file so ApplyEdit can get it(AAJ)
 	public string fileName;
@@ -35,6 +36,7 @@ public class InstrumentScript : MonoBehaviour {
 	public Toggle LoopToggle;
 	public Slider TimeSlider;
 	public Image Graph;
+	public Slider NotesSlider;
 
 	//Holds the previous position that child 0 was located at (AAJ)
 	float previousPosition;
@@ -114,7 +116,12 @@ public class InstrumentScript : MonoBehaviour {
 	void Update () {
 		ColorSet ();
 		noteValue = TempoSlider.value;
-		volume = VolumeSlider.value;
+		if (NumberOfInstruments == 1) {
+			volume = VolumeSlider.value;
+		}
+		else {
+			volume = VolumeSlider.value/(NumberOfInstruments - 1);
+		}
 		audioSources[0].volume = volume;
 		audioSources[1].volume = volume;
 		loop = LoopToggle.isOn;
@@ -269,6 +276,11 @@ public class InstrumentScript : MonoBehaviour {
 		NumberOfNotes = Mathf.RoundToInt(Instrument.length)/6;
 	}
 
+	public void SetData(){
+		PerformanceLength = Mathf.RoundToInt(NotesSlider.value);
+		LoadDataForInstrument (Graph.sprite, RawData, this.fileName);
+	}
+
 	/// <summary>
 	/// Loads the data for instrument.
 	/// </summary>
@@ -305,7 +317,12 @@ public class InstrumentScript : MonoBehaviour {
 			Notes.Add(Mathf.InverseLerp(min,max,GraphData[i].y));
 		}//for
 
+		//alters the slider so no out of bounds errors
 		TimeSlider.maxValue = Notes.Count - 1;
+		if (TimeSlider.value >= TimeSlider.maxValue) {
+			TimeSlider.value = TimeSlider.maxValue;
+			currentNote = Mathf.RoundToInt(TimeSlider.maxValue);
+		}//if
 	}//LoadDataForInstrument
 
 	public List<Vector3> Normalize(int performanceSeconds, List<Vector3> drawnPoints){
@@ -431,26 +448,31 @@ public class InstrumentScript : MonoBehaviour {
 			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat1)
 				break;
 			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat1;
+			graphSuspended.GetComponent<DrawLine>().UpdateLine(RawData);
 			break;
 		case 1:
 			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat2)
 				break;
 			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat2;
+			graphSuspended.GetComponent<DrawLine>().UpdateLine(RawData);
 			break;
 		case 2:
 			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat3)
 				break;
 			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat3;
+			graphSuspended.GetComponent<DrawLine>().UpdateLine(RawData);
 			break;
 		case 3:
 			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat4)
 				break;
 			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat4;
+			graphSuspended.GetComponent<DrawLine>().UpdateLine(RawData);
 			break;
 		case 4:
 			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat5)
-				return;
+				break;
 			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat5;
+			graphSuspended.GetComponent<DrawLine>().UpdateLine(RawData);
 			break;
 		}
 	}//ColorSet
