@@ -106,28 +106,13 @@ public class InstrumentScript : MonoBehaviour {
 		}//else
 		*/
 		LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints(),tracingScript.GetFileName());
-		switch (instrumentNumber) {
-		case 0:
-			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat1;
-			break;
-		case 1:
-			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat2;
-			break;
-		case 2:
-			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat3;
-			break;
-		case 3:
-			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat4;
-			break;
-		case 4:
-			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat5;
-			break;
-		}
+
 		graphSuspended.GetComponent<DrawLine> ().UpdateLine (RawData);
 	}//Start
 	
 	// Update is called once per frame
 	void Update () {
+		ColorSet ();
 		noteValue = TempoSlider.value;
 		volume = VolumeSlider.value;
 		audioSources[0].volume = volume;
@@ -439,4 +424,34 @@ public class InstrumentScript : MonoBehaviour {
 			instrumentMoved = false;
 		}//if
 	}//MoveInstrumentDown
+
+	public void ColorSet() {
+		switch (instrumentNumber) {
+		case 0:
+			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat1)
+				break;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat1;
+			break;
+		case 1:
+			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat2)
+				break;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat2;
+			break;
+		case 2:
+			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat3)
+				break;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat3;
+			break;
+		case 3:
+			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat4)
+				break;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat4;
+			break;
+		case 4:
+			if(graphSuspended.GetComponent<DrawLine>().lineRenderer.material == Mat5)
+				return;
+			graphSuspended.GetComponent<DrawLine> ().lineRenderer.material = Mat5;
+			break;
+		}
+	}//ColorSet
 }//InstrumentScript
