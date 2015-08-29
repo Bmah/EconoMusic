@@ -71,11 +71,11 @@ public class InstrumentScript : MonoBehaviour {
 		graphSuspended = Instantiate (drawObject, this.transform.position, this.transform.rotation) as GameObject;
 		graphSuspended.GetComponent<DrawLine> ().drawing = false;
 		graphSuspended.GetComponent<DrawLine> ().lineRenderer = graphSuspended.GetComponent<LineRenderer> ();
-		yLocation = this.transform.GetChild (0).transform.position.y + scrollHeight;
+		yLocation = this.transform.position.y + scrollHeight;
 		downYLocation = yLocation - scrollHeight;
 
 		//Inititalizes previous position with the start postition (AAJ)
-		previousPosition = transform.GetChild(0).transform.position.y;
+		previousPosition = transform.position.y;
 
 		mainCamera = Camera.main;
 
@@ -146,33 +146,27 @@ public class InstrumentScript : MonoBehaviour {
 			}//else
 		}//if
 
-		if(ShowInstrumentControls && this.transform.GetChild(0).transform.position.y > downYLocation) {
+		if(ShowInstrumentControls && this.transform.position.y > downYLocation) {
 
-			for(int i = 0; i < this.transform.childCount; i++){
-				this.transform.GetChild(i).transform.Translate(new Vector3(0,-scrollSpeed * ((this.transform.GetChild(0).transform.position.y - downYLocation)/scrollHeight),0)*Time.deltaTime);
-			
-			}//foreach
+			this.transform.Translate(new Vector3(0,-scrollSpeed * ((this.transform.position.y - downYLocation)/scrollHeight),0)*Time.deltaTime);
 
 			//If the instrument is moving hide the image, other wise, show it
-			if(previousPosition == transform.GetChild(0).transform.position.y){
+			if(previousPosition == transform.position.y){
 				
 				//Reveals the instruments image so it can be interacted with (AAJ)
 				graphImage.SetActive(true);
 			}//if
 		}//if
-		else if(!ShowInstrumentControls && this.transform.GetChild(0).transform.position.y < yLocation){
+		else if(!ShowInstrumentControls && this.transform.position.y < yLocation){
 
-			for(int i = 0; i < this.transform.childCount; i++){
-			
-				this.transform.GetChild(i).transform.Translate(new Vector3(0,scrollSpeed * ((yLocation - this.transform.GetChild(0).transform.position.y)/scrollHeight),0)*Time.deltaTime);
-			}//foreach
+			this.transform.Translate(new Vector3(0,scrollSpeed * ((yLocation - this.transform.position.y)/scrollHeight),0)*Time.deltaTime);
 
 			//Hides the instruments image so it cannot be interacted with (AAJ)
 			graphImage.SetActive(false);
 		}//else if
 
 		//Updates previousPosition with the last place the child 0 was located (AAJ)
-		previousPosition = transform.GetChild (0).transform.position.y;
+		previousPosition = transform.position.y;
 
 	}//Update
 
