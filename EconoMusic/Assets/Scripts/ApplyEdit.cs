@@ -68,14 +68,16 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 	//changes the parent of the object being dragged (AAJ)
 	#region IDropHandler implementation
 	public void OnDrop (PointerEventData eventData){
-		
+
 		if(!item){
 
 			if(DragAndDrop.itemBeingDragged.GetComponent<GraphReceiver>() != null){
-
+				Debug.Log ("here");
 				//Copies the image from the dragged item to the instruments graph image (AAJ)
 				//GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
 
+				Destroy(transform.parent.parent.GetComponentInParent<InstrumentScript>().graphSuspended);
+				transform.parent.parent.GetComponentInParent<InstrumentScript>().CreateBGGraph();
 				//Applies an edit to an instrument (AAJ)
 				transform.parent.parent.GetComponentInParent<InstrumentScript>().
 					LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints(),tracingScript.GetFileName());
@@ -149,6 +151,11 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 		graphPanel.transform.parent.GetComponentInParent<InstrumentScript> ().graphSuspended.
 			GetComponent<DrawLine> ().beingEdited = true;
 		DrawObject.GetComponent<DrawLine> ().beingEdited = true;
+		//graphPanel.transform.parent.GetComponentInParent<InstrumentScript> ().RawData.Clear();
+		graphPanel.transform.parent.GetComponentInParent<InstrumentScript> ().graphSuspended.
+			GetComponent<DrawLine> ().UpdateLine (graphPanel.transform.parent.GetComponentInParent
+			                                    <InstrumentScript> ().RawData);
+
 
 		//Passes the name of the image to the tracing script(AAJ)
 		//Instrument scirpt needs to updated to hold the image's name (AAJ)
