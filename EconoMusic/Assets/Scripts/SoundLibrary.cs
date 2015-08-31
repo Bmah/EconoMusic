@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class SoundLibrary : MonoBehaviour {
 	//These are the variables for the various sound files.
-	public AudioClip altoSaxophone, bassoon, cello, clarinet, digeredoo, doubleBass, guitar;
-	public AudioClip harp, piano, theremin, timpani, trombone, trumpet, vibraphone;
+	public AudioClip altoSaxophone, bassoon, cello, clarinet, congaDrums, digeredoo, doubleBass, guitar;
+	public AudioClip harp, piano, synthLead, synthLead2, theremin, timpani, trombone, trumpet, vibraphone;
 	public AudioClip violin, vocalBass, vocalSoprano;
 
 
