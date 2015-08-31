@@ -41,7 +41,7 @@ public class InstrumentScript : MonoBehaviour {
 	//Holds the previous position that child 0 was located at (AAJ)
 	float previousPosition;
 	float yLocation,downYLocation;
-	float scrollSpeed = 1000f;
+	float scrollSpeed = 4000f;
 	bool ShowInstrumentControls = true;
 	bool instrumentMoved = false;
 	float scrollHeight = 520f;
@@ -68,14 +68,7 @@ public class InstrumentScript : MonoBehaviour {
 	// Use this for initialization
 
 	void Start () {
-		graphSuspended = Instantiate (drawObject, this.transform.position, this.transform.rotation) as GameObject;
-		graphSuspended.GetComponent<DrawLine> ().drawing = false;
-		graphSuspended.GetComponent<DrawLine> ().lineRenderer = graphSuspended.GetComponent<LineRenderer> ();
-		yLocation = this.transform.position.y + scrollHeight;
-		downYLocation = yLocation - scrollHeight;
-
-		//Inititalizes previous position with the start postition (AAJ)
-		previousPosition = transform.position.y;
+		CreateBGGraph ();
 
 		mainCamera = Camera.main;
 
@@ -470,4 +463,14 @@ public class InstrumentScript : MonoBehaviour {
 			break;
 		}
 	}//ColorSet
+	public void CreateBGGraph() {
+		graphSuspended = Instantiate (drawObject, this.transform.position, this.transform.rotation) as GameObject;
+		graphSuspended.GetComponent<DrawLine> ().drawing = false;
+		graphSuspended.GetComponent<DrawLine> ().lineRenderer = graphSuspended.GetComponent<LineRenderer> ();
+		yLocation = this.transform.position.y + scrollHeight;
+		downYLocation = yLocation - scrollHeight;
+		
+		//Inititalizes previous position with the start postition (AAJ)
+		previousPosition = transform.position.y;
+	}//CreateBGGraph
 }//InstrumentScript

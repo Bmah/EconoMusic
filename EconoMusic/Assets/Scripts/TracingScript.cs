@@ -107,6 +107,9 @@ public class TracingScript : MonoBehaviour {
 	/// </summary>
 	public void ConfirmTrace(){
 
+		//Disables the tracing when the confirm button is pressed (AAJ)
+		drawObject.GetComponent<DrawLine>().drawing = false;
+
 		//Finds the instruments (AAJ)
 		instruments = GameObject.FindGameObjectsWithTag("Instrument");
 
@@ -114,10 +117,14 @@ public class TracingScript : MonoBehaviour {
 		for(int i = 0; i < instruments.Length; i++){
 
 			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentDown();
+
+			//This rerenders the instruments' lines so that they are sent to the back (AAJ)
+			//instruments[i].GetComponent<InstrumentScript>().graphSuspended.GetComponent<DrawLine>().UpdateLine
+			//	(instruments[i].GetComponent<InstrumentScript>().RawData);
 		}//for
 
-		//Disables the tracing when the confirm button is pressed (AAJ)
-		drawObject.GetComponent<DrawLine>().drawing = false;
+		//This rerenders the tracing screen's line so it will be brought to the front (AAJ)
+		//drawObject.GetComponent<DrawLine>().UpdateLine(linePoints);
 
 		//Gets the line points drawn in the tracing (AAJ)
 		linePoints = new List<Vector3>(drawObject.GetComponent<DrawLine>().linePoints);
@@ -135,8 +142,7 @@ public class TracingScript : MonoBehaviour {
 		GameObject newDrawObject = Instantiate(drawObject, new Vector3(-557.7203f,-226.53f,0), Quaternion.identity) as GameObject;
 		newDrawObject.transform.SetParent(tracingScreen.transform, true);
 		drawObject.GetComponent<DrawLine> ().beingEdited = false;
-
-
+		
 		//Destroys the previous line (AAJ)
 		Destroy(drawObject);
 
