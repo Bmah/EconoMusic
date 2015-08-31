@@ -41,7 +41,7 @@ public class InstrumentScript : MonoBehaviour {
 	//Holds the previous position that child 0 was located at (AAJ)
 	float previousPosition;
 	float yLocation,downYLocation;
-	float scrollSpeed = 1000f;
+	float scrollSpeed = 4000f;
 	bool ShowInstrumentControls = true;
 	bool instrumentMoved = false;
 	float scrollHeight = 520f;
