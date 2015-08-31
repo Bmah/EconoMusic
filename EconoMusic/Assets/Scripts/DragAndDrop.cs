@@ -17,17 +17,41 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler,IDragHandler,IEndDra
 	//Holds what the parent of the object is (AAJ)
 	Transform startParent;
 
+	//Holds whether or not to bybass the loaded check for images
+	//that are not supposed to load in images (AAJ)
+	private bool bypassLoaded = false;
+
+	// Use this for initialization
+	void Start(){
+
+		//If this image is not intended to load in images
+		//DragAndDrop will still work without LoadTexture(AAJ)
+		if(loadTexture == null){
+			
+			bypassLoaded = true;
+		}//if
+	}//Start
+
 	//Prepares the drag process (AAJ)
 	#region IBeginDragHandler implementation
 	public void OnBeginDrag(PointerEventData eventData){
 
-		if(loadTexture.loaded == true){
+		//This allows LoadTexture to not be a necessary part of DragAndDrop (AAJ)
+		if(loadTexture != null){
+
+			if(loadTexture.loaded == true){
+
+				bypassLoaded = true;
+			}//if
+		}//if
+
+		if(bypassLoaded == true){
 
 			itemBeingDragged = gameObject;
 			startPosition = transform.position;
 			startParent = transform.parent;
 			GetComponent<CanvasGroup>().blocksRaycasts = false;
-		}
+		}//if
 	}//OnBeginDrag
 	#endregion
 
@@ -35,7 +59,16 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler,IDragHandler,IEndDra
 	#region IDragHandler implementation
 	public void OnDrag(PointerEventData eventData){
 
-		if(loadTexture.loaded == true){
+		//This allows LoadTexture to not be a necessary part of DragAndDrop (AAJ)
+		if(loadTexture != null){
+			
+			if(loadTexture.loaded == true){
+				
+				bypassLoaded = true;
+			}//if
+		}//if
+
+		if(bypassLoaded == true){
 
 			transform.position = Input.mousePosition;
 		}
@@ -46,7 +79,16 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler,IDragHandler,IEndDra
 	#region IEndDragHandler implementation
 	public void OnEndDrag(PointerEventData eventData){
 
-		if(loadTexture.loaded == true){
+		//This allows LoadTexture to not be a necessary part of DragAndDrop (AAJ)
+		if(loadTexture != null){
+			
+			if(loadTexture.loaded == true){
+				
+				bypassLoaded = true;
+			}//if
+		}//if
+
+		if(bypassLoaded == true){
 
 			itemBeingDragged = null;
 			GetComponent<CanvasGroup>().blocksRaycasts = true;

@@ -23,7 +23,13 @@ public class TracingScript : MonoBehaviour {
 	private GameObject drawObject;
 
 	//Holds the points from the drawn line (AAJ)
-	public List<Vector3> linePoints; 
+	private List<Vector3> linePoints; 
+
+	//Holds the name of the file so it can be used to display on an instrument (AAJ)
+	private string fileName;
+
+	//Holds the master insturment so it can be enabled (AAJ)
+	private GameObject[] instruments;
 
 	// Use this for initialization
 	void Start(){
@@ -31,6 +37,8 @@ public class TracingScript : MonoBehaviour {
 		//disables the the tracing screen at the start of
 		//the game in case someone accidentally enables it (AAJ)
 		tracingScreen.SetActive(false);
+		//Debug.Log ("here");
+
 	}//Start
 
 	/// <summary>
@@ -40,7 +48,15 @@ public class TracingScript : MonoBehaviour {
 	public void SetDrawObject(GameObject drawObject){
 
 		this.drawObject = drawObject;
-	}
+	}//SetDrawObject
+
+	/// <summary>
+	/// Sets the name of the file (AAJ)
+	/// </summary>
+	public void SetFileName(string fileName){
+
+		this.fileName = fileName;
+	}//SetFileName
 
 	// Update is called once per frame
 	void Update(){
@@ -48,7 +64,7 @@ public class TracingScript : MonoBehaviour {
 		//makes sure that the drawObject is not null (AAJ)
 		if(drawObject != null){
 
-			if(drawObject.GetComponent<DrawLine>().linePoints.Count > 1){
+			if(drawObject.GetComponent<DrawLine>().linePoints.Count > 0){
 
 				confrimButton.interactable = true;
 			}//if
@@ -69,6 +85,7 @@ public class TracingScript : MonoBehaviour {
 
 			//Enables the tracing (AAJ)
 			drawObject.GetComponent<DrawLine>().drawing = true;
+			drawObject.GetComponent<DrawLine>().beingEdited = true;
 		}//if
 	}//DrawingOn
 
@@ -90,8 +107,14 @@ public class TracingScript : MonoBehaviour {
 	/// </summary>
 	public void ConfirmTrace(){
 
-		//Normalizes the line before it is turned into music (AAJ)
-		drawObject.GetComponent<DrawLine>().Normalize();
+		//Finds the instruments (AAJ)
+		instruments = GameObject.FindGameObjectsWithTag("Instrument");
+
+		//Moves any instruments that were moved up back down (AAJ)
+		for(int i = 0; i < instruments.Length; i++){
+
+			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentDown();
+		}//for
 
 		//Disables the tracing when the confirm button is pressed (AAJ)
 		drawObject.GetComponent<DrawLine>().drawing = false;
@@ -99,25 +122,36 @@ public class TracingScript : MonoBehaviour {
 		//Gets the line points drawn in the tracing (AAJ)
 		linePoints = new List<Vector3>(drawObject.GetComponent<DrawLine>().linePoints);
 
-		//disables the tracing screen (AAJ)
+		//Disables the tracing screen (AAJ)
 		tracingScreen.SetActive(false);
 
-		//clears the previous line's points so they will not render on the screen (AAJ)
+		//Clears the previous line's points so they will not render on the screen (AAJ)
 		drawObject.GetComponent<DrawLine>().linePoints.Clear();
 
-		//removes the line from the screen (AAJ)
-		drawObject.GetComponent<DrawLine> ().UpdateLine();
+		//Removes the line from the screen (AAJ)
+		drawObject.GetComponent<DrawLine>().UpdateLine(new List<Vector3>());
 
 		//Instantiates a line that can be used to trace a graph (AAJ)
 		GameObject newDrawObject = Instantiate(drawObject, new Vector3(-557.7203f,-226.53f,0), Quaternion.identity) as GameObject;
 		newDrawObject.transform.SetParent(tracingScreen.transform, true);
+		drawObject.GetComponent<DrawLine> ().beingEdited = false;
+
 
 		//Destroys the previous line (AAJ)
 		Destroy(drawObject);
 
-		//enables the New Instrumetn button (AAJ)
+		//Enables the New Instrumetn button (AAJ)
 		newInstrument.interactable = true;
 	}//ConfrimTrace
+
+	/// <summary>
+	/// Gets the name of the file (AAJ)
+	/// </summary>
+	public string GetFileName(){
+
+		//returns the file name so an instrumetn can display it (AAJ)
+		return(fileName);
+	}//GetFileName
 
 	/// <summary>
 	/// Gives the line points to the audio player so it 

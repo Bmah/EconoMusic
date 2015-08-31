@@ -14,6 +14,9 @@ public class LoadTexture : MonoBehaviour{
 	//Holds the file path so textures can be loaded in (AAJ)
 	string filePath;
 
+	//Holds the name of the file so it can be used to display on an instrument (AAJ)
+	public string fileName;
+
 	//Holds the default image for the textures (AAJ)
 	public Sprite defaultPlusImage;
 
@@ -32,14 +35,23 @@ public class LoadTexture : MonoBehaviour{
 	//Holds a button that will delete a loaded texture (AAJ)
 	public GameObject deleteButton;
 
+	//Holds the text box for displaying the images file name (AAJ)
+	public Text fileNameText;
+
+	//Holds the master insturment so it can be enabled (AAJ)
+	private GameObject[] instruments;
+
 	// Use this for initialization
 	void Start ()
 	{
-		//resets the loaded variable for new instantiations of slot (AAJ)
+		//Resets the loaded variable for new instantiations of slot (AAJ)
 		loaded = false;
 
-		//sets the texture to the default image when it is generated (AAJ)
+		//Sets the texture to the default image when it is generated (AAJ)
 		GetComponent<Image>().sprite = defaultPlusImage;
+
+		//Clears the textures text box (AAJ)
+		fileNameText.text = "";
 
 	}//Start
 
@@ -64,38 +76,64 @@ public class LoadTexture : MonoBehaviour{
 
 				browser.Show(path, searchPatterns, this, mode);
 			}
-		}
-	}
+		
+			//Finds the instruments (AAJ)
+			instruments = GameObject.FindGameObjectsWithTag("Instrument");
+			
+			//Moves any instruments that were moved up back down (AAJ)
+			for(int i = 0; i < instruments.Length; i++){
+				
+				instruments[i].GetComponent<InstrumentScript>().MoveInsturmentUp();
+			}//for
+		}//if
+	}//OnMouseDown
 	
 	// The FileBrowser will send a message to this MonoBehaviour when the user selects a file
 	// Set the 'SelectEventName' in the inspector to the name of the function you want to receive the message
 	void OnFileSelected(FileInfo info){
 			
-			sel = info;
+		sel = info;
 			
-			//Loads in the texture (AAJ)
-			load(sel.path);
-	}
+		//Loads in the texture (AAJ)
+		load(sel.path);
+			
+		//Moves any instruments that were moved up back down (AAJ)
+		for(int i = 0; i < instruments.Length; i++){
+			
+			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentDown();
+		}//for
+	}//OnFileSelected
 	
 	void OnFileChange(FileInfo file){
 
+		//Gets the name of the file so it can be displayed on the instrument (AAJ)
+		fileName = file.name;
+
 		Debug.Log("File section changed to: " + file.name);
-	}
+	}//OnFileChange
 	
 	void OnBrowseCancel(){
 
+		//Moves any instruments that were moved up back down (AAJ)
+		for(int i = 0; i < instruments.Length; i++){
+			
+			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentDown();
+		}//for
+
 		Debug.Log("You have cancelled");
-	}
+	}//OnBrowseCancel
 
 	/// <summary>
 	/// Load the specified texture. (AAJ)
 	/// </summary>
-	/// <param name="filePath">File path.</param>
 	void load(string filePath){
 
 		//Prevents multiple textures being loaded onto the same object
 		//but only once something has been loaded (AAJ)
 		loaded = true;
+
+		//Puts the file name on the images' text component (AAJ)
+		fileNameText.text = fileName;
 
 		//Gets the sprite from the file path (AAJ)
 		byte[] bytes = System.IO.File.ReadAllBytes(filePath);
@@ -115,7 +153,7 @@ public class LoadTexture : MonoBehaviour{
 
 		//sets the new slots parent to the slot panel (AAJ)
 		newSlot.transform.SetParent(texturePanel.transform, false);
-	}
+	}//Load
 
 	/// <summary>
 	/// Deletes the texture. (AAJ)

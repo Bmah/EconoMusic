@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class MasterInstrument : MonoBehaviour {
-
-	public Canvas GameCanvas;
+	
 	public GameObject InstrumentTemplate;
 	private List<InstrumentScript> Instruments = new List<InstrumentScript> ();
 
@@ -83,9 +82,33 @@ public class MasterInstrument : MonoBehaviour {
 		if (Instruments.Count < 5) {
 			offset += 200;
 			GameObject NewInstrument = Instantiate (InstrumentTemplate, new Vector3 (offset, this.transform.position.y, 0), Quaternion.identity) as GameObject;
-			NewInstrument.transform.parent = GameCanvas.transform;
-
+			NewInstrument.transform.SetParent(this.transform);
+			NewInstrument.GetComponent<InstrumentScript>().masterInstrument = this;
+			NewInstrument.GetComponent<InstrumentScript>().instrumentNumber = Instruments.Count;
 			Instruments.Add (NewInstrument.GetComponent<InstrumentScript> ());
+
+			//updates the number of instruments in each instrument
+			for(int i = 0; i < Instruments.Count; i++){
+				Instruments[i].GetComponent<InstrumentScript>().NumberOfInstruments = Instruments.Count;
+			}
 		}//if
 	}//NewInstrument
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public void DeleteInstrument(int index){
+		//InstrumentScript temp = Instruments [index];
+		Instruments.RemoveAt (index);
+		offset -= 200;
+		for (int i = index; i < Instruments.Count; i++) {
+			Instruments[i].transform.position = new Vector3(Instruments[i].transform.position.x - 200, Instruments[i].transform.position.y, Instruments[i].transform.position.z);
+			Instruments[i].instrumentNumber -= 1;
+		}//for
+
+		//updates the number of instruments in each instrument
+		for(int i = 0; i < Instruments.Count; i++){
+			Instruments[i].GetComponent<InstrumentScript>().NumberOfInstruments = Instruments.Count;
+		}
+	}//Delete Instrument
 }//MasterInstrument
