@@ -117,14 +117,7 @@ public class TracingScript : MonoBehaviour {
 		for(int i = 0; i < instruments.Length; i++){
 
 			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentDown();
-
-			//This rerenders the instruments' lines so that they are sent to the back (AAJ)
-			//instruments[i].GetComponent<InstrumentScript>().graphSuspended.GetComponent<DrawLine>().UpdateLine
-			//	(instruments[i].GetComponent<InstrumentScript>().RawData);
 		}//for
-
-		//This rerenders the tracing screen's line so it will be brought to the front (AAJ)
-		//drawObject.GetComponent<DrawLine>().UpdateLine(linePoints);
 
 		//Gets the line points drawn in the tracing (AAJ)
 		linePoints = new List<Vector3>(drawObject.GetComponent<DrawLine>().linePoints);
