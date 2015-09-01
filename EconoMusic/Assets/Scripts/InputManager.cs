@@ -3,10 +3,14 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class InputManager : MonoBehaviour {
 
 	public Canvas dropDownMenu;
+
+	public MasterInstrument masterInstrument;
+	private List<bool> playingInstruments;
 
 	private bool isToggled = true;
 
@@ -22,14 +26,29 @@ public class InputManager : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Toggles the drop down menu.
+	/// </summary>
 	public void ToggleDropDownMenu() {
 		if (isToggled) {
 			dropDownMenu.gameObject.SetActive(false);
 			isToggled = false;
+
+			//This part plays all of the instruments that are playing when pausing Brian Mah
+			for(int i = 0; i < masterInstrument.Instruments.Count; i++){
+				masterInstrument.Instruments[i].play = playingInstruments[i];
+			}
 		} 
 		else {
 			dropDownMenu.gameObject.SetActive(true);
 			isToggled = true;
+			
+			//This part keeps track of all the instruments that are playing when pausing Brian Mah
+			playingInstruments = new List<bool>();
+			for(int i = 0; i < masterInstrument.Instruments.Count; i++){
+				playingInstruments.Add(masterInstrument.Instruments[i].play);
+			}
+			masterInstrument.PauseAll();
 		}
 	}
 }
