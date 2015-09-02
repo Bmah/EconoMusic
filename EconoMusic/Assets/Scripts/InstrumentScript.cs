@@ -250,12 +250,68 @@ public class InstrumentScript : MonoBehaviour {
 	/// Loads the instrument.
 	/// </summary>
 	public void LoadInstrument(int choice){
+
+
 		switch (choice) {
 		case 0:
-			Instrument = soundLibrary.vibraphone;
+			Instrument = soundLibrary.piano;
 			break;
 		case 1:
+			Instrument = soundLibrary.clarinet;
+			break;
+		case 2:
 			Instrument = soundLibrary.altoSaxophone;
+			break;
+		case 3:
+			Instrument = soundLibrary.bassoon;
+			break;
+		case 4:
+			Instrument = soundLibrary.digeredoo;
+			break;
+		case 5:
+			Instrument = soundLibrary.trumpet;
+			break;
+		case 6:
+			Instrument = soundLibrary.trombone;
+			break;
+		case 7:
+			Instrument = soundLibrary.violin;
+			break;
+		case 8:
+			Instrument = soundLibrary.cello;
+			break;
+		case 9:
+			Instrument = soundLibrary.doubleBass;
+			break;
+		case 10:
+			Instrument = soundLibrary.guitar;
+			break;
+		case 11:
+			Instrument = soundLibrary.harp;
+			break;
+		case 12:
+			Instrument = soundLibrary.theremin;
+			break;
+		case 13:
+			Instrument = soundLibrary.synthLead;
+			break;
+		case 14:
+			Instrument = soundLibrary.synthLead2;
+			break;
+		case 15:
+			Instrument = soundLibrary.vocalBass;
+			break;
+		case 16:
+			Instrument = soundLibrary.vocalSoprano;
+			break;
+		case 17:
+			Instrument = soundLibrary.vibraphone;
+			break;
+		case 18:
+			Instrument = soundLibrary.timpani;
+			break;
+		case 19:
+			Instrument = soundLibrary.congaDrums;
 			break;
 		}
 		audioSources [0].clip = Instrument;
