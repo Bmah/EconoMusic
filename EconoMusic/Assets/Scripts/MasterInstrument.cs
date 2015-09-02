@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class MasterInstrument : MonoBehaviour {
 	
 	public GameObject InstrumentTemplate;
-	private List<InstrumentScript> Instruments = new List<InstrumentScript> ();
+	public List<InstrumentScript> Instruments = new List<InstrumentScript> ();
 
 	public Slider MasterTempoSlider;
 	public Slider MasterVolumeSlider;
