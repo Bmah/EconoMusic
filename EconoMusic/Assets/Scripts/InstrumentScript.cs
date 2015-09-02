@@ -37,6 +37,7 @@ public class InstrumentScript : MonoBehaviour {
 	public Slider TimeSlider;
 	public Image Graph;
 	public Slider NotesSlider;
+	public GameObject MusicNote;
 
 	//Holds the previous position that child 0 was located at (AAJ)
 	float previousPosition;
@@ -62,6 +63,9 @@ public class InstrumentScript : MonoBehaviour {
 	public Material Mat3;
 	public Material Mat4;
 	public Material Mat5;
+
+	private List<Vector3> notesPlaying;
+	private int noteDest = 0;
 
 	Camera mainCamera;
 
@@ -103,6 +107,10 @@ public class InstrumentScript : MonoBehaviour {
 		LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints(),tracingScript.GetFileName());
 
 		graphSuspended.GetComponent<DrawLine> ().UpdateLine (RawData);
+
+		Vector3 setter = new Vector3 (-25, -25, 0);
+		//Debug.Log ("here");
+		Instantiate (MusicNote, setter, this.transform.rotation);
 	}//Start
 	
 	// Update is called once per frame
@@ -170,6 +178,7 @@ public class InstrumentScript : MonoBehaviour {
 	{
 		if ((Time.time % noteValue) < 0.05f && !playedNoteRecently)//if a turn's length has passed
 		{
+			UpdateMusicNote(currentNote);
 			float pitchThreshold = Mathf.Pow (NumberOfNotes, -1);
 			int currentPitch = 0;
 
@@ -342,6 +351,7 @@ public class InstrumentScript : MonoBehaviour {
 		fileNameText.text = fileName;
 
 		GraphData = Normalize (PerformanceLength, GraphData);
+		notesPlaying = GraphData;
 		Debug.Log (Instrument.length);
 		NumberOfNotes = Mathf.RoundToInt(Instrument.length)/6;
 		if (DebugMode) {
@@ -529,4 +539,17 @@ public class InstrumentScript : MonoBehaviour {
 		//Inititalizes previous position with the start postition (AAJ)
 		previousPosition = transform.position.y;
 	}//CreateBGGraph
+
+	public void UpdateMusicNote(int currentNote) {
+		Debug.Log (notesPlaying [currentNote]);
+		Debug.Log (RawData [noteDest]);
+		if (notesPlaying [currentNote].x <= RawData [noteDest].x)
+			MusicNote.transform.position = RawData [noteDest];//if
+		else {
+			if (noteDest != RawData.Count - 1) {
+				noteDest++;
+				MusicNote.transform.position = RawData [noteDest];
+			}//if
+		}//else
+	}//UpdateMusicNote
 }//InstrumentScript
