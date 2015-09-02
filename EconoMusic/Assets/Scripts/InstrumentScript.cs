@@ -37,6 +37,8 @@ public class InstrumentScript : MonoBehaviour {
 	public Slider TimeSlider;
 	public Image Graph;
 	public Slider NotesSlider;
+	public GameObject MusicNote;
+	private GameObject visibleNote;
 
 	//Holds the previous position that child 0 was located at (AAJ)
 	float previousPosition;
@@ -62,6 +64,9 @@ public class InstrumentScript : MonoBehaviour {
 	public Material Mat3;
 	public Material Mat4;
 	public Material Mat5;
+
+	private List<Vector3> notesPlaying;
+	private int noteDest = 0;
 
 	Camera mainCamera;
 
@@ -103,6 +108,10 @@ public class InstrumentScript : MonoBehaviour {
 		LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints(),tracingScript.GetFileName());
 
 		graphSuspended.GetComponent<DrawLine> ().UpdateLine (RawData);
+
+		Vector3 setter = new Vector3 (-25, -25, 0);
+		//Debug.Log ("here");
+		visibleNote = Instantiate (MusicNote, setter, this.transform.rotation) as GameObject;
 	}//Start
 	
 	// Update is called once per frame
@@ -132,6 +141,7 @@ public class InstrumentScript : MonoBehaviour {
 			if(loop){
 				currentNote = 0;
 				TimeSlider.value = 0;
+				noteDest = 0;
 			}//if
 			else{
 				audioSources[0].Stop();
@@ -170,6 +180,7 @@ public class InstrumentScript : MonoBehaviour {
 	{
 		if ((Time.time % noteValue) < 0.05f && !playedNoteRecently)//if a turn's length has passed
 		{
+			UpdateMusicNote(currentNote);
 			float pitchThreshold = Mathf.Pow (NumberOfNotes, -1);
 			int currentPitch = 0;
 
@@ -342,6 +353,7 @@ public class InstrumentScript : MonoBehaviour {
 		fileNameText.text = fileName;
 
 		GraphData = Normalize (PerformanceLength, GraphData);
+		notesPlaying = GraphData;
 		Debug.Log (Instrument.length);
 		NumberOfNotes = Mathf.RoundToInt(Instrument.length)/6;
 		if (DebugMode) {
@@ -443,6 +455,7 @@ public class InstrumentScript : MonoBehaviour {
 	public void Delete(){
 		masterInstrument.DeleteInstrument (instrumentNumber);
 		GameObject.Destroy (graphSuspended);
+		GameObject.Destroy (visibleNote);
 		GameObject.Destroy(this.gameObject);
 	}
 
@@ -529,4 +542,19 @@ public class InstrumentScript : MonoBehaviour {
 		//Inititalizes previous position with the start postition (AAJ)
 		previousPosition = transform.position.y;
 	}//CreateBGGraph
+
+	public void UpdateMusicNote(int currentNote) {
+		Debug.Log (notesPlaying [currentNote].x+RawData[0].x);
+		Debug.Log (RawData [noteDest].x);
+		if ((notesPlaying [currentNote].x + RawData[0].x) <= RawData [noteDest].x)
+			visibleNote.transform.position = RawData [noteDest];//if
+		else {
+
+			if (noteDest != RawData.Count - 1) {
+				while ( (notesPlaying [currentNote].x + RawData[0].x) > RawData[noteDest].x) {
+					noteDest++;}//while
+				visibleNote.transform.position = RawData [noteDest];
+			}//if
+		}//else
+	}//UpdateMusicNote
 }//InstrumentScript
