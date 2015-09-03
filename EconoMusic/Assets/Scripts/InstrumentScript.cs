@@ -135,7 +135,6 @@ public class InstrumentScript : MonoBehaviour {
 		audioSources[0].volume = volume;
 		audioSources[1].volume = volume;
 		if (loop != LoopToggle.isOn) {
-			Debug.Log (loop + " " + LoopToggle.isOn);
 			loop = LoopToggle.isOn;
 			if (loopButtonImage.color == invisible) {
 				loopButtonImage.color = visible;
@@ -357,6 +356,9 @@ public class InstrumentScript : MonoBehaviour {
 
 	public void SetData(){
 		PerformanceLength = Mathf.RoundToInt(NotesSlider.value);
+		if (PerformanceLength < 1) {
+			PerformanceLength = 1;
+		}//if
 		LoadDataForInstrument (Graph.sprite, RawData, this.fileName);
 	}
 
@@ -376,10 +378,12 @@ public class InstrumentScript : MonoBehaviour {
 
 		//Updates the file name text box (AAJ)
 		fileNameText.text = fileName;
-
 		GraphData = Normalize (PerformanceLength, GraphData);
+		Debug.Log(GraphData.Count +" "+ PerformanceLength);
 		notesPlaying = GraphData;
-		Debug.Log (Instrument.length);
+		if (DebugMode) {
+			Debug.Log ("Instrument soundclip is "+Instrument.length+" seconds long");
+		}
 		NumberOfNotes = Mathf.RoundToInt(Instrument.length)/6;
 		if (DebugMode) {
 			Debug.Log("NumberOfNotes " + NumberOfNotes);
@@ -399,15 +403,16 @@ public class InstrumentScript : MonoBehaviour {
 
 		//alters the slider so no out of bounds errors
 		TimeSlider.maxValue = Notes.Count - 1;
+		Debug.Log ("made it here");
 		if (TimeSlider.value >= TimeSlider.maxValue) {
 			TimeSlider.value = TimeSlider.maxValue;
-			currentNote = Mathf.RoundToInt(TimeSlider.maxValue);
+			currentNote = Mathf.RoundToInt (TimeSlider.maxValue);
 		}//if
 	}//LoadDataForInstrument
 
 	public List<Vector3> Normalize(int performanceSeconds, List<Vector3> drawnPoints){
 		
-		int numBeats = Mathf.RoundToInt(performanceSeconds / TempoSlider.value);
+		int numBeats = performanceSeconds;
 		List<Vector3> normalized = new List<Vector3> (numBeats);//good
 		float drawingDistance = drawnPoints [drawnPoints.Count - 1].x - drawnPoints [0].x;
 		float xSpacing = drawingDistance / ((float)numBeats);
