@@ -255,6 +255,10 @@ public class InstrumentScript : MonoBehaviour {
 	/// </summary>
 	public void UseTimeSlider(){
 		currentNote = Mathf.RoundToInt(TimeSlider.value);
+		noteDest = 0;
+		while ( (notesPlaying [currentNote].x + RawData[0].x) > RawData[noteDest].x) {
+			noteDest++;}//while
+		visibleNote.transform.position = RawData [noteDest];
 	}//UseTimeSlider
 
 	/// <summary>
