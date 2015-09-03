@@ -68,47 +68,50 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 	//changes the parent of the object being dragged (AAJ)
 	#region IDropHandler implementation
 	public void OnDrop (PointerEventData eventData){
-
+		
 		if(!item){
 
-			if(DragAndDrop.itemBeingDragged.GetComponent<GraphReceiver>() != null){
-				Debug.Log ("here");
-				//Copies the image from the dragged item to the instruments graph image (AAJ)
-				//GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
+			if(DragAndDrop.itemBeingDragged != null){
 
-				Destroy(transform.parent.parent.GetComponentInParent<InstrumentScript>().graphSuspended);
-				transform.parent.parent.GetComponentInParent<InstrumentScript>().CreateBGGraph();
-				//Applies an edit to an instrument (AAJ)
-				transform.parent.parent.GetComponentInParent<InstrumentScript>().
-					LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints(),tracingScript.GetFileName());
+				if(DragAndDrop.itemBeingDragged.GetComponent<GraphReceiver>() != null){
+					Debug.Log ("here");
+					//Copies the image from the dragged item to the instruments graph image (AAJ)
+					//GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
 
-				//Test print
-				//Debug.Log("Edit Applied");
-				//updates the overlayed graph image once the edit has been applied
-				transform.parent.parent.GetComponentInParent<InstrumentScript>().graphSuspended.
-					GetComponent<DrawLine>().UpdateLine(transform.parent.parent.GetComponentInParent
-					                                    <InstrumentScript>().RawData);
-				transform.parent.parent.GetComponentInParent<InstrumentScript> ().graphSuspended.
-					GetComponent<DrawLine>().beingEdited = false;
-
-				//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
-			}//if
-
-			if(DragAndDrop.itemBeingDragged.GetComponent<ApplyEdit>() != null){
-
-				if(DragAndDrop.itemBeingDragged.GetComponent<GraphReceiver>() == null){
-
-					if(isInstrument == false){
-
-						//Calls a function that will will allow the user
-						//to edit an existing instrument (AAJ)
-						EditMode();
+					Destroy(transform.parent.parent.GetComponentInParent<InstrumentScript>().graphSuspended);
+					transform.parent.parent.GetComponentInParent<InstrumentScript>().CreateBGGraph();
+					//Applies an edit to an instrument (AAJ)
+					transform.parent.parent.GetComponentInParent<InstrumentScript>().
+						LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints(),tracingScript.GetFileName());
+						
+					//Test print
+					//Debug.Log("Edit Applied");
+					//updates the overlayed graph image once the edit has been applied
+					transform.parent.parent.GetComponentInParent<InstrumentScript>().graphSuspended.
+						GetComponent<DrawLine>().UpdateLine(transform.parent.parent.GetComponentInParent
+						                                    <InstrumentScript>().RawData);
+					transform.parent.parent.GetComponentInParent<InstrumentScript> ().graphSuspended.
+						GetComponent<DrawLine>().beingEdited = false;
+						
+					//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
+				}//if
 					
-						//Test print
-						//Debug.Log("Editing Mode");
-					
-						//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
-					}
+				if(DragAndDrop.itemBeingDragged.GetComponent<ApplyEdit>() != null){
+						
+					if(DragAndDrop.itemBeingDragged.GetComponent<GraphReceiver>() == null){
+							
+						if(isInstrument == false){
+								
+							//Calls a function that will will allow the user
+							//to edit an existing instrument (AAJ)
+							EditMode();
+						
+							//Test print
+							//Debug.Log("Editing Mode");
+						
+							//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
+						}
+					}//if
 				}//if
 			}//if
 		}//if

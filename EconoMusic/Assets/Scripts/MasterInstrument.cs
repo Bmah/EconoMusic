@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class MasterInstrument : MonoBehaviour {
 	
 	public GameObject InstrumentTemplate;
-	private List<InstrumentScript> Instruments = new List<InstrumentScript> ();
+	public List<InstrumentScript> Instruments = new List<InstrumentScript> ();
 
 	public Slider MasterTempoSlider;
 	public Slider MasterVolumeSlider;
@@ -31,7 +31,7 @@ public class MasterInstrument : MonoBehaviour {
 	/// </summary>
 	public void PlayAll(){
 		for (int i = 0; i < Instruments.Count; i++) {
-			Instruments[i].play = true;
+			Instruments[i].PlayInstument();
 		}//for
 	}//PlayAll
 
@@ -40,7 +40,7 @@ public class MasterInstrument : MonoBehaviour {
 	/// </summary>
 	public void PauseAll(){
 		for (int i = 0; i < Instruments.Count; i++) {
-			Instruments[i].play = false;
+			Instruments[i].PauseInstrument();
 		}//for
 	}//PauseAll
 
@@ -69,7 +69,6 @@ public class MasterInstrument : MonoBehaviour {
 	/// </summary>
 	public void UpdateLoop(){
 		for (int i = 0; i < Instruments.Count; i++) {
-			Instruments[i].loop = MasterLoopToggle.isOn;
 			Instruments[i].LoopToggle.isOn = MasterLoopToggle.isOn;
 		}//for
 	}//UpdateLoop

@@ -37,11 +37,13 @@ public class InstrumentScript : MonoBehaviour {
 	public Slider TimeSlider;
 	public Image Graph;
 	public Slider NotesSlider;
+	public GameObject MusicNote;
+	private GameObject visibleNote;
 
 	//Holds the previous position that child 0 was located at (AAJ)
 	float previousPosition;
 	float yLocation,downYLocation;
-	float scrollSpeed = 1000f;
+	float scrollSpeed = 4000f;
 	bool ShowInstrumentControls = true;
 	bool instrumentMoved = false;
 	float scrollHeight = 520f;
@@ -63,7 +65,14 @@ public class InstrumentScript : MonoBehaviour {
 	public Material Mat4;
 	public Material Mat5;
 
+	private List<Vector3> notesPlaying;
+	private int noteDest = 0;
+
 	Camera mainCamera;
+
+	public Image playButtonImage, pauseButtonImage, loopButtonImage;
+	private Color invisible = new Color(0f,0f,0f,0f);
+	private Color visible = new Color(1f,1f,1f,1f);
 
 	// Use this for initialization
 
@@ -103,6 +112,14 @@ public class InstrumentScript : MonoBehaviour {
 		LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints(),tracingScript.GetFileName());
 
 		graphSuspended.GetComponent<DrawLine> ().UpdateLine (RawData);
+
+		Vector3 setter = new Vector3 (-25, -25, 0);
+		//Debug.Log ("here");
+		visibleNote = Instantiate (MusicNote, setter, this.transform.rotation) as GameObject;
+
+		playButtonImage.color = invisible;
+		pauseButtonImage.color = visible;
+		loopButtonImage.color = invisible;
 	}//Start
 	
 	// Update is called once per frame
@@ -117,7 +134,15 @@ public class InstrumentScript : MonoBehaviour {
 		}
 		audioSources[0].volume = volume;
 		audioSources[1].volume = volume;
-		loop = LoopToggle.isOn;
+		if (loop != LoopToggle.isOn) {
+			loop = LoopToggle.isOn;
+			if (loopButtonImage.color == invisible) {
+				loopButtonImage.color = visible;
+			}
+			else {
+				loopButtonImage.color = invisible;
+			}
+		}
 
 		if (currentNote < Notes.Count && play) {
 			PlayMusic ();
@@ -132,6 +157,7 @@ public class InstrumentScript : MonoBehaviour {
 			if(loop){
 				currentNote = 0;
 				TimeSlider.value = 0;
+				noteDest = 0;
 			}//if
 			else{
 				audioSources[0].Stop();
@@ -170,6 +196,7 @@ public class InstrumentScript : MonoBehaviour {
 	{
 		if ((Time.time % noteValue) < 0.05f && !playedNoteRecently)//if a turn's length has passed
 		{
+			UpdateMusicNote(currentNote);
 			float pitchThreshold = Mathf.Pow (NumberOfNotes, -1);
 			int currentPitch = 0;
 
@@ -230,6 +257,8 @@ public class InstrumentScript : MonoBehaviour {
 	/// </summary>
 	public void PlayInstument(){
 		play = true;
+		playButtonImage.color = visible;
+		pauseButtonImage.color = invisible;
 	}//PlayInstrument
 
 	/// <summary>
@@ -237,6 +266,8 @@ public class InstrumentScript : MonoBehaviour {
 	/// </summary>
 	public void PauseInstrument(){
 		play = false;
+		pauseButtonImage.color = visible;
+		playButtonImage.color = invisible;
 	}//PauseInstrument
 
 	/// <summary>
@@ -244,18 +275,78 @@ public class InstrumentScript : MonoBehaviour {
 	/// </summary>
 	public void UseTimeSlider(){
 		currentNote = Mathf.RoundToInt(TimeSlider.value);
+		noteDest = 0;
+		while ( (notesPlaying [currentNote].x + RawData[0].x) > RawData[noteDest].x) {
+			noteDest++;}//while
+		visibleNote.transform.position = RawData [noteDest];
 	}//UseTimeSlider
 
 	/// <summary>
 	/// Loads the instrument.
 	/// </summary>
 	public void LoadInstrument(int choice){
+
+
 		switch (choice) {
 		case 0:
-			Instrument = soundLibrary.vibraphone;
+			Instrument = soundLibrary.piano;
 			break;
 		case 1:
+			Instrument = soundLibrary.clarinet;
+			break;
+		case 2:
 			Instrument = soundLibrary.altoSaxophone;
+			break;
+		case 3:
+			Instrument = soundLibrary.bassoon;
+			break;
+		case 4:
+			Instrument = soundLibrary.digeredoo;
+			break;
+		case 5:
+			Instrument = soundLibrary.trumpet;
+			break;
+		case 6:
+			Instrument = soundLibrary.trombone;
+			break;
+		case 7:
+			Instrument = soundLibrary.violin;
+			break;
+		case 8:
+			Instrument = soundLibrary.cello;
+			break;
+		case 9:
+			Instrument = soundLibrary.doubleBass;
+			break;
+		case 10:
+			Instrument = soundLibrary.guitar;
+			break;
+		case 11:
+			Instrument = soundLibrary.harp;
+			break;
+		case 12:
+			Instrument = soundLibrary.theremin;
+			break;
+		case 13:
+			Instrument = soundLibrary.synthLead;
+			break;
+		case 14:
+			Instrument = soundLibrary.synthLead2;
+			break;
+		case 15:
+			Instrument = soundLibrary.vocalBass;
+			break;
+		case 16:
+			Instrument = soundLibrary.vocalSoprano;
+			break;
+		case 17:
+			Instrument = soundLibrary.vibraphone;
+			break;
+		case 18:
+			Instrument = soundLibrary.timpani;
+			break;
+		case 19:
+			Instrument = soundLibrary.congaDrums;
 			break;
 		}
 		audioSources [0].clip = Instrument;
@@ -265,6 +356,9 @@ public class InstrumentScript : MonoBehaviour {
 
 	public void SetData(){
 		PerformanceLength = Mathf.RoundToInt(NotesSlider.value);
+		if (PerformanceLength < 1) {
+			PerformanceLength = 1;
+		}//if
 		LoadDataForInstrument (Graph.sprite, RawData, this.fileName);
 	}
 
@@ -284,9 +378,12 @@ public class InstrumentScript : MonoBehaviour {
 
 		//Updates the file name text box (AAJ)
 		fileNameText.text = fileName;
-
 		GraphData = Normalize (PerformanceLength, GraphData);
-		Debug.Log (Instrument.length);
+		Debug.Log(GraphData.Count +" "+ PerformanceLength);
+		notesPlaying = GraphData;
+		if (DebugMode) {
+			Debug.Log ("Instrument soundclip is "+Instrument.length+" seconds long");
+		}
 		NumberOfNotes = Mathf.RoundToInt(Instrument.length)/6;
 		if (DebugMode) {
 			Debug.Log("NumberOfNotes " + NumberOfNotes);
@@ -306,15 +403,16 @@ public class InstrumentScript : MonoBehaviour {
 
 		//alters the slider so no out of bounds errors
 		TimeSlider.maxValue = Notes.Count - 1;
+		Debug.Log ("made it here");
 		if (TimeSlider.value >= TimeSlider.maxValue) {
 			TimeSlider.value = TimeSlider.maxValue;
-			currentNote = Mathf.RoundToInt(TimeSlider.maxValue);
+			currentNote = Mathf.RoundToInt (TimeSlider.maxValue);
 		}//if
 	}//LoadDataForInstrument
 
 	public List<Vector3> Normalize(int performanceSeconds, List<Vector3> drawnPoints){
 		
-		int numBeats = Mathf.RoundToInt(performanceSeconds / TempoSlider.value);
+		int numBeats = performanceSeconds;
 		List<Vector3> normalized = new List<Vector3> (numBeats);//good
 		float drawingDistance = drawnPoints [drawnPoints.Count - 1].x - drawnPoints [0].x;
 		float xSpacing = drawingDistance / ((float)numBeats);
@@ -387,6 +485,7 @@ public class InstrumentScript : MonoBehaviour {
 	public void Delete(){
 		masterInstrument.DeleteInstrument (instrumentNumber);
 		GameObject.Destroy (graphSuspended);
+		GameObject.Destroy (visibleNote);
 		GameObject.Destroy(this.gameObject);
 	}
 
@@ -473,4 +572,19 @@ public class InstrumentScript : MonoBehaviour {
 		//Inititalizes previous position with the start postition (AAJ)
 		previousPosition = transform.position.y;
 	}//CreateBGGraph
+
+	public void UpdateMusicNote(int currentNote) {
+		Debug.Log (notesPlaying [currentNote].x+RawData[0].x);
+		Debug.Log (RawData [noteDest].x);
+		if ((notesPlaying [currentNote].x + RawData[0].x) <= RawData [noteDest].x)
+			visibleNote.transform.position = RawData [noteDest];//if
+		else {
+
+			if (noteDest != RawData.Count - 1) {
+				while ( (notesPlaying [currentNote].x + RawData[0].x) > RawData[noteDest].x) {
+					noteDest++;}//while
+				visibleNote.transform.position = RawData [noteDest];
+			}//if
+		}//else
+	}//UpdateMusicNote
 }//InstrumentScript
