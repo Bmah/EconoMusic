@@ -70,6 +70,10 @@ public class InstrumentScript : MonoBehaviour {
 
 	Camera mainCamera;
 
+	public Image playButtonImage, pauseButtonImage, loopButtonImage;
+	private Color invisible = new Color(0f,0f,0f,0f);
+	private Color visible = new Color(1f,1f,1f,1f);
+
 	// Use this for initialization
 
 	void Start () {
@@ -112,6 +116,10 @@ public class InstrumentScript : MonoBehaviour {
 		Vector3 setter = new Vector3 (-25, -25, 0);
 		//Debug.Log ("here");
 		visibleNote = Instantiate (MusicNote, setter, this.transform.rotation) as GameObject;
+
+		playButtonImage.color = invisible;
+		pauseButtonImage.color = visible;
+		loopButtonImage.color = invisible;
 	}//Start
 	
 	// Update is called once per frame
@@ -126,7 +134,16 @@ public class InstrumentScript : MonoBehaviour {
 		}
 		audioSources[0].volume = volume;
 		audioSources[1].volume = volume;
-		loop = LoopToggle.isOn;
+		if (loop != LoopToggle.isOn) {
+			Debug.Log (loop + " " + LoopToggle.isOn);
+			loop = LoopToggle.isOn;
+			if (loopButtonImage.color == invisible) {
+				loopButtonImage.color = visible;
+			}
+			else {
+				loopButtonImage.color = invisible;
+			}
+		}
 
 		if (currentNote < Notes.Count && play) {
 			PlayMusic ();
@@ -241,6 +258,8 @@ public class InstrumentScript : MonoBehaviour {
 	/// </summary>
 	public void PlayInstument(){
 		play = true;
+		playButtonImage.color = visible;
+		pauseButtonImage.color = invisible;
 	}//PlayInstrument
 
 	/// <summary>
@@ -248,6 +267,8 @@ public class InstrumentScript : MonoBehaviour {
 	/// </summary>
 	public void PauseInstrument(){
 		play = false;
+		pauseButtonImage.color = visible;
+		playButtonImage.color = invisible;
 	}//PauseInstrument
 
 	/// <summary>
