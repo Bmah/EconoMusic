@@ -437,7 +437,7 @@ public class FileBrowser : MonoBehaviour
 
 				//This should bring up the user's pictures directory, which the app should
 				//have access to thanks to the entitlements file (AAJ)
-				DefaultDirectory = ":/" + Environment.UserName + "/Pictures";
+				DefaultDirectory = "/Users/" + Environment.UserName + "/Pictures";
 
 				//I'm leaving this line here for testing (AAJ)
 				//currentDir = ":/" + Environment.UserName + "/Pictures";
