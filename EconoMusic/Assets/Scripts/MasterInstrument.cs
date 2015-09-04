@@ -80,7 +80,7 @@ public class MasterInstrument : MonoBehaviour {
 	public void NewInstrument(){
 		if (Instruments.Count < 5) {
 			offset += 200;
-			GameObject NewInstrument = Instantiate (InstrumentTemplate, new Vector3 (offset, this.transform.position.y, 0), Quaternion.identity) as GameObject;
+			GameObject NewInstrument = Instantiate (InstrumentTemplate, new Vector3 (offset, this.transform.position.y - 200, 0), Quaternion.identity) as GameObject;
 			NewInstrument.transform.SetParent(this.transform);
 			NewInstrument.GetComponent<InstrumentScript>().masterInstrument = this;
 			NewInstrument.GetComponent<InstrumentScript>().instrumentNumber = Instruments.Count;

@@ -46,7 +46,7 @@ public class InstrumentScript : MonoBehaviour {
 	float scrollSpeed = 4000f;
 	bool ShowInstrumentControls = true;
 	bool instrumentMoved = false;
-	float scrollHeight = 520f;
+	float scrollHeight = 460f;
 
 	public bool loop = false;
 	public bool play = false;
