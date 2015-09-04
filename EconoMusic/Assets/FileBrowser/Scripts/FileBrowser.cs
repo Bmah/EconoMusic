@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using System;
 
 public class FileBrowser : MonoBehaviour
 {
@@ -415,6 +416,12 @@ public class FileBrowser : MonoBehaviour
                     files.Add(new FileInfo(drives[i], drives[i], false));
                 }
                 currentDir = "My PC";
+
+				//I'm leaving this line here for testing (AAJ)
+				//DefaultDirectory = "C:/Users/" + Environment.UserName + "/Searches/Pictures";
+
+				//This line didn't seem to be necessary (AAJ)
+				//currentDir = "C:/Users/" + Environment.UserName + "/Searches/Pictures";
             }
         } else if (Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXPlayer)
         {
@@ -426,7 +433,14 @@ public class FileBrowser : MonoBehaviour
                 {
                     files.Add(new FileInfo(drives[i], drives[i], false));
                 }
-                currentDir = "My PC";
+                //currentDir = "My PC";
+
+				//This should bring up the user's pictures directory, which the app should
+				//have access to thanks to the entitlements file (AAJ)
+				DefaultDirectory = ":/" + Environment.UserName + "/Pictures";
+
+				//I'm leaving this line here for testing (AAJ)
+				//currentDir = ":/" + Environment.UserName + "/Pictures";
             }
             slash = "/";
         }
