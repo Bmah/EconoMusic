@@ -28,8 +28,11 @@ public class TracingScript : MonoBehaviour {
 	//Holds the name of the file so it can be used to display on an instrument (AAJ)
 	private string fileName;
 
-	//Holds the master insturment so it can be enabled (AAJ)
+	//Holds the insturments so they can be hidden/shown (AAJ)
 	private GameObject[] instruments;
+
+	//Holds the Master Instrument so it can be hidden/shown 
+	public MasterInstrument masterInstrument;
 
 	// Use this for initialization
 	void Start(){
@@ -118,6 +121,8 @@ public class TracingScript : MonoBehaviour {
 
 			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentDown();
 		}//for
+
+		masterInstrument.ShowMasterInstrument ();
 
 		//Gets the line points drawn in the tracing (AAJ)
 		linePoints = new List<Vector3>(drawObject.GetComponent<DrawLine>().linePoints);
