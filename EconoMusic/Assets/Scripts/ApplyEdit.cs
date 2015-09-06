@@ -31,6 +31,9 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 	//Holds the master insturment so it can be disabled (AAJ)
 	private GameObject[] instruments;
 
+	//Holds the Master Instrument so it can be hidden/shown 
+	public MasterInstrument masterInstrument;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -172,5 +175,8 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 
 			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentUp();
 		}//for
+
+		masterInstrument.HideMasterInstrument ();
+
 	}//EditMode
 }//ApplyEdit

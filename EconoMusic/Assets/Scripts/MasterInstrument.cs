@@ -13,23 +13,49 @@ public class MasterInstrument : MonoBehaviour {
 
 	float offset;
 
+	public Image playButtonImage, pauseButtonImage, loopButtonImage;
+	private Color invisible = new Color(0f,0f,0f,0f);
+	private Color visible = new Color(1f,1f,1f,1f);
+
+	public Sprite[] tabColors;
+
+	float yLocation,downYLocation;
+	float scrollSpeed = 4000f;
+	bool ShowInstrumentControls = true;
+	float scrollHeight = 387f;
+
+	public GameObject SelectedImagePanel;
+
+	public GameObject BaseImage;
+
 	// Use this for initialization
 	void Start () {
 		if (InstrumentTemplate == null) {
 			Debug.LogError("Please Insert InstrumentTemplate into MasterInstrument Script");
 		}//if
 		offset = this.transform.position.x;
+		yLocation = this.transform.position.y + scrollHeight;
+		downYLocation = yLocation - scrollHeight;
 	}//Start
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(ShowInstrumentControls && this.transform.position.y > downYLocation) {
+			SelectedImagePanel.transform.Translate(new Vector3(0,-scrollSpeed * ((this.transform.position.y - downYLocation)/scrollHeight),0)*Time.deltaTime);
+			this.transform.Translate(new Vector3(0,-scrollSpeed * ((this.transform.position.y - downYLocation)/scrollHeight),0)*Time.deltaTime);
+		}//if
+		else if(!ShowInstrumentControls && this.transform.position.y < yLocation){
+			SelectedImagePanel.transform.Translate(new Vector3(0,scrollSpeed * ((yLocation - this.transform.position.y)/scrollHeight),0)*Time.deltaTime);
+			this.transform.Translate(new Vector3(0,scrollSpeed * ((yLocation - this.transform.position.y)/scrollHeight),0)*Time.deltaTime);
+		}//else if
 	}
 
 	/// <summary>
 	/// Plays all instruments.
 	/// </summary>
 	public void PlayAll(){
+		playButtonImage.color = visible;
+		pauseButtonImage.color = invisible;
 		for (int i = 0; i < Instruments.Count; i++) {
 			Instruments[i].PlayInstument();
 		}//for
@@ -39,6 +65,8 @@ public class MasterInstrument : MonoBehaviour {
 	/// Pauses all instruments.
 	/// </summary>
 	public void PauseAll(){
+		playButtonImage.color = invisible;
+		pauseButtonImage.color = visible;
 		for (int i = 0; i < Instruments.Count; i++) {
 			Instruments[i].PauseInstrument();
 		}//for
@@ -68,6 +96,12 @@ public class MasterInstrument : MonoBehaviour {
 	/// updates all of the loop values of the insruments as well as their toggle's values
 	/// </summary>
 	public void UpdateLoop(){
+		if (MasterLoopToggle.isOn) {
+			loopButtonImage.color = visible;
+		}//if
+		else {
+			loopButtonImage.color = invisible;
+		}
 		for (int i = 0; i < Instruments.Count; i++) {
 			Instruments[i].LoopToggle.isOn = MasterLoopToggle.isOn;
 		}//for
@@ -81,11 +115,11 @@ public class MasterInstrument : MonoBehaviour {
 		if (Instruments.Count < 5) {
 			offset += 200;
 			GameObject NewInstrument = Instantiate (InstrumentTemplate, new Vector3 (offset, this.transform.position.y - 120, 0), Quaternion.identity) as GameObject;
-			NewInstrument.transform.SetParent(this.transform);
+			NewInstrument.transform.SetParent(BaseImage.transform);
 			NewInstrument.GetComponent<InstrumentScript>().masterInstrument = this;
 			NewInstrument.GetComponent<InstrumentScript>().instrumentNumber = Instruments.Count;
+			NewInstrument.GetComponent<InstrumentScript>().tabImage.sprite = tabColors[Instruments.Count];
 			Instruments.Add (NewInstrument.GetComponent<InstrumentScript> ());
-
 			//updates the number of instruments in each instrument
 			for(int i = 0; i < Instruments.Count; i++){
 				Instruments[i].GetComponent<InstrumentScript>().NumberOfInstruments = Instruments.Count;
@@ -103,6 +137,7 @@ public class MasterInstrument : MonoBehaviour {
 		for (int i = index; i < Instruments.Count; i++) {
 			Instruments[i].transform.position = new Vector3(Instruments[i].transform.position.x - 200, Instruments[i].transform.position.y, Instruments[i].transform.position.z);
 			Instruments[i].instrumentNumber -= 1;
+			Instruments[i].tabImage.sprite = tabColors[Instruments[i].instrumentNumber];
 		}//for
 
 		//updates the number of instruments in each instrument
@@ -110,4 +145,13 @@ public class MasterInstrument : MonoBehaviour {
 			Instruments[i].GetComponent<InstrumentScript>().NumberOfInstruments = Instruments.Count;
 		}
 	}//Delete Instrument
+
+	public void ShowMasterInstrument(){
+		ShowInstrumentControls = true;
+	}
+
+	public void HideMasterInstrument(){
+		ShowInstrumentControls = false;
+	}
+
 }//MasterInstrument

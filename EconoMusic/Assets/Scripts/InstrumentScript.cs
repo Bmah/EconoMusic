@@ -70,7 +70,7 @@ public class InstrumentScript : MonoBehaviour {
 
 	Camera mainCamera;
 
-	public Image playButtonImage, pauseButtonImage, loopButtonImage;
+	public Image playButtonImage, pauseButtonImage, loopButtonImage, tabImage;
 	private Color invisible = new Color(0f,0f,0f,0f);
 	private Color visible = new Color(1f,1f,1f,1f);
 
