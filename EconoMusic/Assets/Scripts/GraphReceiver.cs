@@ -21,6 +21,9 @@ public class GraphReceiver : MonoBehaviour, IDropHandler{
 	//Holds the master insturment so it can be disabled (AAJ)
 	private GameObject[] instruments;
 
+	//Holds the Master Instrument so it can be hidden/shown 
+	public MasterInstrument masterInstrument;
+
 	//returns the first child (AAJ)
 	public GameObject item{
 
@@ -70,7 +73,9 @@ public class GraphReceiver : MonoBehaviour, IDropHandler{
 							
 						instruments[i].GetComponent<InstrumentScript>().MoveInsturmentUp();
 					}//for
-						
+
+					masterInstrument.HideMasterInstrument ();
+
 					//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
 				}//if
 			}//if

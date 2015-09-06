@@ -19,17 +19,33 @@ public class MasterInstrument : MonoBehaviour {
 
 	public Sprite[] tabColors;
 
+	float yLocation,downYLocation;
+	float scrollSpeed = 4000f;
+	public bool ShowInstrumentControls = true;
+	float scrollHeight = 387f;
+
+	public GameObject SelectedImagePanel;
+
 	// Use this for initialization
 	void Start () {
 		if (InstrumentTemplate == null) {
 			Debug.LogError("Please Insert InstrumentTemplate into MasterInstrument Script");
 		}//if
 		offset = this.transform.position.x;
+		yLocation = this.transform.position.y + scrollHeight;
+		downYLocation = yLocation - scrollHeight;
 	}//Start
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(ShowInstrumentControls && this.transform.position.y > downYLocation) {
+			SelectedImagePanel.transform.Translate(new Vector3(0,-scrollSpeed * ((this.transform.position.y - downYLocation)/scrollHeight),0)*Time.deltaTime);
+			this.transform.Translate(new Vector3(0,-scrollSpeed * ((this.transform.position.y - downYLocation)/scrollHeight),0)*Time.deltaTime);
+		}//if
+		else if(!ShowInstrumentControls && this.transform.position.y < yLocation){
+			SelectedImagePanel.transform.Translate(new Vector3(0,scrollSpeed * ((yLocation - this.transform.position.y)/scrollHeight),0)*Time.deltaTime);
+			this.transform.Translate(new Vector3(0,scrollSpeed * ((yLocation - this.transform.position.y)/scrollHeight),0)*Time.deltaTime);
+		}//else if
 	}
 
 	/// <summary>
@@ -127,4 +143,13 @@ public class MasterInstrument : MonoBehaviour {
 			Instruments[i].GetComponent<InstrumentScript>().NumberOfInstruments = Instruments.Count;
 		}
 	}//Delete Instrument
+
+	public void ShowMasterInstrument(){
+		ShowInstrumentControls = true;
+	}
+
+	public void HideMasterInstrument(){
+		ShowInstrumentControls = false;
+	}
+
 }//MasterInstrument
