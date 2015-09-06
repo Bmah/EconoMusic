@@ -21,10 +21,12 @@ public class MasterInstrument : MonoBehaviour {
 
 	float yLocation,downYLocation;
 	float scrollSpeed = 4000f;
-	public bool ShowInstrumentControls = true;
+	bool ShowInstrumentControls = true;
 	float scrollHeight = 387f;
 
 	public GameObject SelectedImagePanel;
+
+	public GameObject BaseImage;
 
 	// Use this for initialization
 	void Start () {
@@ -113,7 +115,7 @@ public class MasterInstrument : MonoBehaviour {
 		if (Instruments.Count < 5) {
 			offset += 200;
 			GameObject NewInstrument = Instantiate (InstrumentTemplate, new Vector3 (offset, this.transform.position.y - 120, 0), Quaternion.identity) as GameObject;
-			NewInstrument.transform.SetParent(this.transform);
+			NewInstrument.transform.SetParent(BaseImage.transform);
 			NewInstrument.GetComponent<InstrumentScript>().masterInstrument = this;
 			NewInstrument.GetComponent<InstrumentScript>().instrumentNumber = Instruments.Count;
 			NewInstrument.GetComponent<InstrumentScript>().tabImage.sprite = tabColors[Instruments.Count];
