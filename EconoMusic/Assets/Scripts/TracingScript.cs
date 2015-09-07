@@ -28,8 +28,11 @@ public class TracingScript : MonoBehaviour {
 	//Holds the name of the file so it can be used to display on an instrument (AAJ)
 	private string fileName;
 
-	//Holds the master insturment so it can be enabled (AAJ)
+	//Holds the insturments so they can be hidden/shown (AAJ)
 	private GameObject[] instruments;
+
+	//Holds the Master Instrument so it can be hidden/shown 
+	public MasterInstrument masterInstrument;
 
 	// Use this for initialization
 	void Start(){
@@ -107,6 +110,9 @@ public class TracingScript : MonoBehaviour {
 	/// </summary>
 	public void ConfirmTrace(){
 
+		//Disables the tracing when the confirm button is pressed (AAJ)
+		drawObject.GetComponent<DrawLine>().drawing = false;
+
 		//Finds the instruments (AAJ)
 		instruments = GameObject.FindGameObjectsWithTag("Instrument");
 
@@ -116,8 +122,7 @@ public class TracingScript : MonoBehaviour {
 			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentDown();
 		}//for
 
-		//Disables the tracing when the confirm button is pressed (AAJ)
-		drawObject.GetComponent<DrawLine>().drawing = false;
+		masterInstrument.ShowMasterInstrument ();
 
 		//Gets the line points drawn in the tracing (AAJ)
 		linePoints = new List<Vector3>(drawObject.GetComponent<DrawLine>().linePoints);
@@ -135,8 +140,7 @@ public class TracingScript : MonoBehaviour {
 		GameObject newDrawObject = Instantiate(drawObject, new Vector3(-557.7203f,-226.53f,0), Quaternion.identity) as GameObject;
 		newDrawObject.transform.SetParent(tracingScreen.transform, true);
 		drawObject.GetComponent<DrawLine> ().beingEdited = false;
-
-
+		
 		//Destroys the previous line (AAJ)
 		Destroy(drawObject);
 

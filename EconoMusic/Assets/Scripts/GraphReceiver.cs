@@ -21,6 +21,9 @@ public class GraphReceiver : MonoBehaviour, IDropHandler{
 	//Holds the master insturment so it can be disabled (AAJ)
 	private GameObject[] instruments;
 
+	//Holds the Master Instrument so it can be hidden/shown 
+	public MasterInstrument masterInstrument;
+
 	//returns the first child (AAJ)
 	public GameObject item{
 
@@ -41,41 +44,41 @@ public class GraphReceiver : MonoBehaviour, IDropHandler{
 
 		if(!item){
 
-			//Copies the image from the dragged item to the instruments graph image (AAJ)
-			GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
+			if(DragAndDrop.itemBeingDragged != null){
 
-			if(DragAndDrop.itemBeingDragged.GetComponent<LoadTexture>() != null){
-				
-				//Sets the tracing graphs sprite and enables the tracing screen (AAJ) 
-				tracingGraph.sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
-				tracingScreen.SetActive(true);
+				//Copies the image from the dragged item to the instruments graph image (AAJ)
+				GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
 
-				//Finds the DrawObject that will be used to trace the graph (AAJ)
-				drawObject = GameObject.FindGameObjectWithTag("Draw");
+				if(DragAndDrop.itemBeingDragged.GetComponent<LoadTexture>() != null){
+					
+					//Sets the tracing graphs sprite and enables the tracing screen (AAJ) 
+					tracingGraph.sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
+					tracingScreen.SetActive(true);
 
-				//Sets the DrawObject that will be used to trace the graph in the TracingScript (AAJ)
-				tracingScript.SetDrawObject(drawObject);
-				drawObject.GetComponent<DrawLine>().beingEdited = true;
+					//Finds the DrawObject that will be used to trace the graph (AAJ)
+					drawObject = GameObject.FindGameObjectWithTag("Draw");
 
-				//Sets the name of the file (AAJ)
-				tracingScript.SetFileName(DragAndDrop.itemBeingDragged.GetComponent<LoadTexture>().fileName);
+					//Sets the DrawObject that will be used to trace the graph in the TracingScript (AAJ)
+					tracingScript.SetDrawObject(drawObject);
+					drawObject.GetComponent<DrawLine>().beingEdited = true;
 
-				//Finds the instruments (AAJ)
-				instruments = GameObject.FindGameObjectsWithTag("Instrument");
-				
-				//Moves any instruments that were moved up back down (AAJ)
-				for(int i = 0; i < instruments.Length; i++){
+					//Sets the name of the file (AAJ)
+					tracingScript.SetFileName(DragAndDrop.itemBeingDragged.GetComponent<LoadTexture>().fileName);
 
-					instruments[i].GetComponent<InstrumentScript>().MoveInsturmentUp();
-				}//for
+					//Finds the instruments (AAJ)
+					instruments = GameObject.FindGameObjectsWithTag("Instrument");
+					
+					//Moves any instruments that were moved up back down (AAJ)
+					for(int i = 0; i < instruments.Length; i++){
+							
+						instruments[i].GetComponent<InstrumentScript>().MoveInsturmentUp();
+					}//for
 
-				//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
+					masterInstrument.HideMasterInstrument ();
+
+					//DragAndDrop.itemBeingDragged.transform.SetParent(transform);
+				}//if
 			}//if
-			/*else{
-
-				//Test Print
-				Debug.Log("You are from an instrument!");
-			}//esle*/
 		}//if
 	}//OnDrop
 	#endregion
