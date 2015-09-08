@@ -90,18 +90,20 @@ public class LoadTexture : MonoBehaviour{
 	
 	// The FileBrowser will send a message to this MonoBehaviour when the user selects a file
 	// Set the 'SelectEventName' in the inspector to the name of the function you want to receive the message
-	void OnFileSelected(FileInfo info){
+	public void OnFileSelected(FileInfo info){
 			
 		sel = info;
 			
 		//Loads in the texture (AAJ)
 		load(sel.path);
 			
-		//Moves any instruments that were moved up back down (AAJ)
-		for(int i = 0; i < instruments.Length; i++){
+		if (instruments != null) {
+			//Moves any instruments that were moved up back down (AAJ)
+			for (int i = 0; i < instruments.Length; i++) {
 			
-			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentDown();
-		}//for
+				instruments [i].GetComponent<InstrumentScript> ().MoveInsturmentDown ();
+			}//for
+		}
 	}//OnFileSelected
 	
 	void OnFileChange(FileInfo file){
@@ -126,7 +128,7 @@ public class LoadTexture : MonoBehaviour{
 	/// <summary>
 	/// Load the specified texture. (AAJ)
 	/// </summary>
-	void load(string filePath){
+	public void load(string filePath){
 
 		//Prevents multiple textures being loaded onto the same object
 		//but only once something has been loaded (AAJ)
