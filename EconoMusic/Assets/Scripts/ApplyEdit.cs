@@ -52,7 +52,7 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 		tracingScript = tracingManager.GetComponent<TracingScript>();
 		tracingScreen = tracingScript.tracingScreen;
 		tracingGraph = tracingScript.tracingGraph;
-		
+
 	}//Start
 
 	//Returns the first child (AAJ)
