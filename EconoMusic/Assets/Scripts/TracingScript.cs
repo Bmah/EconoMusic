@@ -9,6 +9,9 @@ public class TracingScript : MonoBehaviour {
 	//Holds the panel where the tracing will be done (AAJ)
 	public GameObject tracingScreen;
 
+	//Holdas the rect of the image
+	public RectTransform tracingGraphRect;
+
 	//Holds the image that will be traced on (AAJ)
 	public Image tracingGraph;
 
