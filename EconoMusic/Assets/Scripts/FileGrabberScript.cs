@@ -10,9 +10,9 @@ public class FileGrabberScript : MonoBehaviour {
 	string[] AllFilesInMyPictures;
 
 	public LoadTexture loadTexture;
+	public GameObject texturePanel;
 
 	//public Image ImageTemp;
-
 
 	// Use this for initialization
 	void Start () {
@@ -30,7 +30,7 @@ public class FileGrabberScript : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (Time.time % 0.2 < 0.1 && !done) {
+		if (Time.time % 1f < 0.5 && !done) {
 			done = true;
 			if(i < AllFilesInMyPictures.Length){
 				if (AllFilesInMyPictures [i].Contains (".jpg") || AllFilesInMyPictures [i].Contains (".png")) {
@@ -46,13 +46,23 @@ public class FileGrabberScript : MonoBehaviour {
 					Debug.Log (fileName);
 				
 					FileInfo newImageFile = new FileInfo (AllFilesInMyPictures [i], fileName, true);
+
+					loadTexture.OnFileChange(newImageFile);
 					loadTexture.OnFileSelected (newImageFile);
+
+					loadTexture = texturePanel.transform.GetChild(texturePanel.transform.childCount-1).GetChild(0).GetComponent<LoadTexture>();
+
+//					for(int k = 0; k < texturePanel.transform.childCount; k++){
+//						if(!texturePanel.transform.GetChild(k).GetChild(0).GetComponent<LoadTexture>().loaded){
+//							loadTexture = texturePanel.transform.GetChild(k).GetChild(0).GetComponent<LoadTexture>();
+//						}
+//					}
 				}
 				i++;
 			}
 		}
 
-		if (Time.time % 0.2 > 0.1 && done) {
+		if (Time.time % 1f > 0.5f && done) {
 			done = false;
 		}
 	}

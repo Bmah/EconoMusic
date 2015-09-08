@@ -106,7 +106,7 @@ public class LoadTexture : MonoBehaviour{
 		}
 	}//OnFileSelected
 	
-	void OnFileChange(FileInfo file){
+	public void OnFileChange(FileInfo file){
 
 		//Gets the name of the file so it can be displayed on the instrument (AAJ)
 		fileName = file.name;
