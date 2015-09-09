@@ -52,7 +52,10 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 		tracingScript = tracingManager.GetComponent<TracingScript>();
 		tracingScreen = tracingScript.tracingScreen;
 		tracingGraph = tracingScript.tracingGraph;
-		
+
+		//Finds the master instrument (AAJ)
+		masterInstrument = GameObject.FindGameObjectWithTag("Master").GetComponent<MasterInstrument>();
+
 	}//Start
 
 	//Returns the first child (AAJ)
@@ -68,7 +71,8 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 		}//get
 	}//item
 	
-	//changes the parent of the object being dragged (AAJ)
+	//Changes the parent of the object being dragged (AAJ)
+	//This function never gets called now (AAJ)
 	#region IDropHandler implementation
 	public void OnDrop (PointerEventData eventData){
 		
@@ -77,22 +81,25 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 			if(DragAndDrop.itemBeingDragged != null){
 
 				if(DragAndDrop.itemBeingDragged.GetComponent<GraphReceiver>() != null){
-					Debug.Log ("here");
+
 					//Copies the image from the dragged item to the instruments graph image (AAJ)
 					//GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
 
 					Destroy(transform.parent.parent.GetComponentInParent<InstrumentScript>().graphSuspended);
 					transform.parent.parent.GetComponentInParent<InstrumentScript>().CreateBGGraph();
+
 					//Applies an edit to an instrument (AAJ)
 					transform.parent.parent.GetComponentInParent<InstrumentScript>().
 						LoadDataForInstrument(tracingScript.GetSprite(),tracingScript.GetLinePoints(),tracingScript.GetFileName());
 						
 					//Test print
 					//Debug.Log("Edit Applied");
+
 					//updates the overlayed graph image once the edit has been applied
 					transform.parent.parent.GetComponentInParent<InstrumentScript>().graphSuspended.
 						GetComponent<DrawLine>().UpdateLine(transform.parent.parent.GetComponentInParent
-						                                    <InstrumentScript>().RawData);
+						<InstrumentScript>().RawData);
+
 					transform.parent.parent.GetComponentInParent<InstrumentScript> ().graphSuspended.
 						GetComponent<DrawLine>().beingEdited = false;
 						
@@ -124,8 +131,8 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 	/// <summary>
 	/// This will allow the user to edit existing instruments (AAJ)
 	/// </summary>
-	void EditMode(){
-		//Debug.Log ("here");
+	public void EditMode(){
+
 		//Enables the tracing screen(AAJ)
 		tracingScreen.SetActive(true);
 
@@ -134,9 +141,12 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 
 		//Holds of chain of transforms that will be used to get
 		//the raw data in instrument script (AAJ)
-		Transform graphSlot = DragAndDrop.itemBeingDragged.transform.parent;
+		Transform graphSlot = this.transform.parent;
 		Transform graphPanel = graphSlot.transform.parent;
 		Transform instrumentObject = graphPanel.transform.parent;
+
+		//Sets the instruments number in the tracing script(AAJ)
+		tracingScript.SetInstrumentNumber(instrumentObject.GetComponent<InstrumentScript>().instrumentNumber);
 
 		//Gives the DrawObject the raw data (AAJ)
 		DrawObject.GetComponent<DrawLine>().linePoints = new List<Vector3>(instrumentObject.GetComponent<InstrumentScript>().RawData);
@@ -156,16 +166,17 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 		tracingGraph.sprite = GetComponent<Image>().sprite;
 		graphPanel.transform.parent.GetComponentInParent<InstrumentScript> ().graphSuspended.
 			GetComponent<DrawLine> ().beingEdited = true;
-		DrawObject.GetComponent<DrawLine> ().beingEdited = true;
+
+		DrawObject.GetComponent<DrawLine>().beingEdited = true;
+
 		//graphPanel.transform.parent.GetComponentInParent<InstrumentScript> ().RawData.Clear();
 		graphPanel.transform.parent.GetComponentInParent<InstrumentScript> ().graphSuspended.
 			GetComponent<DrawLine> ().UpdateLine (graphPanel.transform.parent.GetComponentInParent
-			                                    <InstrumentScript> ().RawData);
-
-
+			<InstrumentScript> ().RawData);
+		
 		//Passes the name of the image to the tracing script(AAJ)
 		//Instrument scirpt needs to updated to hold the image's name (AAJ)
-		tracingScript.SetFileName(DragAndDrop.itemBeingDragged.transform.parent.parent.parent.GetComponent<InstrumentScript>().fileName);
+		tracingScript.SetFileName(this.transform.parent.parent.parent.GetComponent<InstrumentScript>().fileName);
 
 		//Finds the instruments (AAJ)
 		instruments = GameObject.FindGameObjectsWithTag("Instrument");
@@ -176,7 +187,7 @@ public class ApplyEdit : MonoBehaviour, IDropHandler{
 			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentUp();
 		}//for
 
-		masterInstrument.HideMasterInstrument ();
+		masterInstrument.HideMasterInstrument();
 
 	}//EditMode
 }//ApplyEdit

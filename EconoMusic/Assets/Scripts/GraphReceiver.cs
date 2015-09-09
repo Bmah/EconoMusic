@@ -25,7 +25,7 @@ public class GraphReceiver : MonoBehaviour, IDropHandler{
 	public MasterInstrument masterInstrument;
 
 	//returns the first child (AAJ)
-	public GameObject item{
+	/*public GameObject item{
 
 		get{
 
@@ -36,23 +36,30 @@ public class GraphReceiver : MonoBehaviour, IDropHandler{
 			return null;
 		}//get
 	}//item
+	*/
 
 	//This used to change the parent of the object being dragged
 	//Now it changes the image being dropped on to the image being dropped (AAJ)
 	#region IDropHandler implementation
 	public void OnDrop (PointerEventData eventData){
 
-		if(!item){
+		//if(!item){
+		if(masterInstrument.Instruments.Count < 5){
 
 			if(DragAndDrop.itemBeingDragged != null){
 
 				//Copies the image from the dragged item to the instruments graph image (AAJ)
-				GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
+				//GetComponent<Image>().sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
 
 				if(DragAndDrop.itemBeingDragged.GetComponent<LoadTexture>() != null){
-					
-					//Sets the tracing graphs sprite and enables the tracing screen (AAJ) 
+
+					//Sets the tracing graphs sprite (AAJ) 
 					tracingGraph.sprite = DragAndDrop.itemBeingDragged.GetComponent<Image>().sprite;
+
+					//Sets the instruments number(AAJ)
+					tracingScript.SetInstrumentNumber(-1);
+
+					//enables the tracing screen (AAJ)
 					tracingScreen.SetActive(true);
 
 					//Finds the DrawObject that will be used to trace the graph (AAJ)

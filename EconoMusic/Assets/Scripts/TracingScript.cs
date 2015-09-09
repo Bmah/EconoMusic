@@ -1,4 +1,4 @@
-﻿//Alex Jungroth
+//Alex Jungroth
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
@@ -13,11 +13,11 @@ public class TracingScript : MonoBehaviour {
 	public Image tracingGraph;
 
 	//Holds the confirm button so it cannot be selected (AAJ)
-	public Button confrimButton;
+	public GameObject confirmButton;
 
 	//Holds the New Instrument button so it can be enabled 
 	//when a new instrument is ready to be made (AAJ)
-	public Button newInstrument;
+	//public Button newInstrument;
 
 	//Holds the line that is used for tracing (AAJ)
 	private GameObject drawObject;
@@ -27,6 +27,9 @@ public class TracingScript : MonoBehaviour {
 
 	//Holds the name of the file so it can be used to display on an instrument (AAJ)
 	private string fileName;
+
+	//Holds the number of the instrument that is being edited (AAJ)
+	private int instrumentNumber = -1;
 
 	//Holds the insturments so they can be hidden/shown (AAJ)
 	private GameObject[] instruments;
@@ -61,6 +64,14 @@ public class TracingScript : MonoBehaviour {
 		this.fileName = fileName;
 	}//SetFileName
 
+	/// <summary>
+	/// Sets the instrument number (AAJ)
+	/// </summary>
+	public void SetInstrumentNumber(int instrumentNumber){
+
+		this.instrumentNumber = instrumentNumber;
+	}//SetInstrumentNumber
+
 	// Update is called once per frame
 	void Update(){
 
@@ -69,11 +80,13 @@ public class TracingScript : MonoBehaviour {
 
 			if(drawObject.GetComponent<DrawLine>().linePoints.Count > 0){
 
-				confrimButton.interactable = true;
+				//confirmButton.interactable = true;
+				confirmButton.SetActive(true);
 			}//if
 			else{
 
-				confrimButton.interactable = false;
+				//confirmButton.interactable = false;
+				confirmButton.SetActive(false);
 			}//else
 		}//if
 	}//Upadte
@@ -117,6 +130,7 @@ public class TracingScript : MonoBehaviour {
 		instruments = GameObject.FindGameObjectsWithTag("Instrument");
 
 		//Moves any instruments that were moved up back down (AAJ)
+
 		for(int i = 0; i < instruments.Length; i++){
 
 			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentDown();
@@ -145,7 +159,31 @@ public class TracingScript : MonoBehaviour {
 		Destroy(drawObject);
 
 		//Enables the New Instrumetn button (AAJ)
-		newInstrument.interactable = true;
+		//newInstrument.interactable = true;
+
+		//If the image was received from the graph receiver it makes a new image
+		//otherwise it it updates an existing image(
+		if(instrumentNumber == -1){
+
+			masterInstrument.NewInstrument();
+		}//if
+		else{
+
+			Destroy(instruments[instrumentNumber].GetComponent<InstrumentScript>().graphSuspended);
+			instruments[instrumentNumber].GetComponent<InstrumentScript>().CreateBGGraph();
+			
+			//Applies an edit to an instrument (AAJ)
+			instruments[instrumentNumber].GetComponent<InstrumentScript>().
+				LoadDataForInstrument(GetSprite(),GetLinePoints(),GetFileName());
+
+			//updates the overlayed graph image once the edit has been applied
+			instruments[instrumentNumber].GetComponent<InstrumentScript>().
+				graphSuspended.GetComponent<DrawLine>().UpdateLine(instruments[instrumentNumber].
+				GetComponent<InstrumentScript>().RawData);
+
+			instruments[instrumentNumber].GetComponent<InstrumentScript>().graphSuspended.
+				GetComponent<DrawLine>().beingEdited = false;
+		}//else
 	}//ConfrimTrace
 
 	/// <summary>
