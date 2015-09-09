@@ -24,7 +24,7 @@ public class MasterInstrument : MonoBehaviour {
 	bool ShowInstrumentControls = true;
 	float scrollHeight = 387f;
 
-	public GameObject SelectedImagePanel;
+	//public GameObject SelectedImagePanel;
 
 	public GameObject BaseImage;
 
@@ -41,11 +41,11 @@ public class MasterInstrument : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(ShowInstrumentControls && this.transform.position.y > downYLocation) {
-			SelectedImagePanel.transform.Translate(new Vector3(0,-scrollSpeed * ((this.transform.position.y - downYLocation)/scrollHeight),0)*Time.deltaTime);
+			//SelectedImagePanel.transform.Translate(new Vector3(0,-scrollSpeed * ((this.transform.position.y - downYLocation)/scrollHeight),0)*Time.deltaTime);
 			this.transform.Translate(new Vector3(0,-scrollSpeed * ((this.transform.position.y - downYLocation)/scrollHeight),0)*Time.deltaTime);
 		}//if
 		else if(!ShowInstrumentControls && this.transform.position.y < yLocation){
-			SelectedImagePanel.transform.Translate(new Vector3(0,scrollSpeed * ((yLocation - this.transform.position.y)/scrollHeight),0)*Time.deltaTime);
+			//SelectedImagePanel.transform.Translate(new Vector3(0,scrollSpeed * ((yLocation - this.transform.position.y)/scrollHeight),0)*Time.deltaTime);
 			this.transform.Translate(new Vector3(0,scrollSpeed * ((yLocation - this.transform.position.y)/scrollHeight),0)*Time.deltaTime);
 		}//else if
 	}
@@ -114,7 +114,7 @@ public class MasterInstrument : MonoBehaviour {
 	public void NewInstrument(){
 		if (Instruments.Count < 5) {
 			offset += 200;
-			GameObject NewInstrument = Instantiate (InstrumentTemplate, new Vector3 (offset, this.transform.position.y - 120, 0), Quaternion.identity) as GameObject;
+			GameObject NewInstrument = Instantiate (InstrumentTemplate, new Vector3 (offset, this.transform.position.y - 120 - scrollHeight, 0), Quaternion.identity) as GameObject;
 			NewInstrument.transform.SetParent(BaseImage.transform);
 			NewInstrument.GetComponent<InstrumentScript>().masterInstrument = this;
 			NewInstrument.GetComponent<InstrumentScript>().instrumentNumber = Instruments.Count;

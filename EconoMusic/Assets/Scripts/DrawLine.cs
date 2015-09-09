@@ -32,8 +32,8 @@ public class DrawLine : MonoBehaviour
 	{
 		thisCamera = Camera.main;
 		lineRenderer = GetComponent<LineRenderer>();
-		if (lineRenderer != null)
-			Debug.Log ("aaaaaaaaaaaaaa");
+		//if (lineRenderer != null)
+		//	Debug.Log ("aaaaaaaaaaaaaa");
 		//I am restricting when you can draw (AAJ)
 		drawing = false;
 		flushed = false;
