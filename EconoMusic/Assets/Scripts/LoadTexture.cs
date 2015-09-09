@@ -35,6 +35,12 @@ public class LoadTexture : MonoBehaviour{
 	//Holds a button that will delete a loaded texture (AAJ)
 	public GameObject deleteButton;
 
+	//Holds a color mask so it can be enabled and disabled (AAJ)
+	public GameObject colorMask;
+
+	//Holds an import image so it can be enabled and disabled (AAJ)
+	public GameObject importImage;
+
 	//Holds the text box for displaying the images file name (AAJ)
 	public Text fileNameText;
 
@@ -58,13 +64,18 @@ public class LoadTexture : MonoBehaviour{
 	// Update is called once per frame
 	void Update(){
 
+		//Updates the images so that they have the proper attributes (AAJ)
 		if(loaded == true){
 		
 			deleteButton.SetActive(true);
+			colorMask.SetActive(true);
+			importImage.SetActive(true);
 		}//if 
 		else{
 
 			deleteButton.SetActive(false);
+			colorMask.SetActive(false);
+			importImage.SetActive(false);
 		}//else
 	}//update
 
