@@ -111,7 +111,7 @@ public class LoadTexture : MonoBehaviour{
 		//Gets the name of the file so it can be displayed on the instrument (AAJ)
 		fileName = file.name;
 
-		Debug.Log("File section changed to: " + file.name);
+		//Debug.Log("File section changed to: " + file.name);
 	}//OnFileChange
 	
 	void OnBrowseCancel(){
@@ -122,7 +122,7 @@ public class LoadTexture : MonoBehaviour{
 			instruments[i].GetComponent<InstrumentScript>().MoveInsturmentDown();
 		}//for
 
-		Debug.Log("You have cancelled");
+		//Debug.Log("You have cancelled");
 	}//OnBrowseCancel
 
 	/// <summary>
