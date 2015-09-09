@@ -77,7 +77,13 @@ public class InstrumentScript : MonoBehaviour {
 	// Use this for initialization
 
 	void Start () {
-		CreateBGGraph ();
+		yLocation = this.transform.position.y + scrollHeight;
+		downYLocation = yLocation - scrollHeight;
+		
+		//Inititalizes previous position with the start postition (AAJ)
+		previousPosition = transform.position.y;
+
+		CreateBGGraph();
 
 		mainCamera = Camera.main;
 
@@ -379,7 +385,7 @@ public class InstrumentScript : MonoBehaviour {
 		//Updates the file name text box (AAJ)
 		fileNameText.text = fileName;
 		GraphData = Normalize (PerformanceLength, GraphData);
-		Debug.Log(GraphData.Count +" "+ PerformanceLength);
+		//Debug.Log(GraphData.Count +" "+ PerformanceLength);
 		notesPlaying = GraphData;
 		if (DebugMode) {
 			Debug.Log ("Instrument soundclip is "+Instrument.length+" seconds long");
@@ -403,7 +409,7 @@ public class InstrumentScript : MonoBehaviour {
 
 		//alters the slider so no out of bounds errors
 		TimeSlider.maxValue = Notes.Count - 1;
-		Debug.Log ("made it here");
+		//Debug.Log ("made it here");
 		if (TimeSlider.value >= TimeSlider.maxValue) {
 			TimeSlider.value = TimeSlider.maxValue;
 			currentNote = Mathf.RoundToInt (TimeSlider.maxValue);
@@ -562,15 +568,12 @@ public class InstrumentScript : MonoBehaviour {
 			break;
 		}
 	}//ColorSet
-	public void CreateBGGraph() {
+
+	public void CreateBGGraph(){
+
 		graphSuspended = Instantiate (drawObject, this.transform.position, this.transform.rotation) as GameObject;
 		graphSuspended.GetComponent<DrawLine> ().drawing = false;
 		graphSuspended.GetComponent<DrawLine> ().lineRenderer = graphSuspended.GetComponent<LineRenderer> ();
-		yLocation = this.transform.position.y + scrollHeight;
-		downYLocation = yLocation - scrollHeight;
-		
-		//Inititalizes previous position with the start postition (AAJ)
-		previousPosition = transform.position.y;
 	}//CreateBGGraph
 
 	public void UpdateMusicNote(int currentNote) {
