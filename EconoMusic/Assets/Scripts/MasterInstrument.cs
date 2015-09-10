@@ -154,4 +154,10 @@ public class MasterInstrument : MonoBehaviour {
 		ShowInstrumentControls = false;
 	}
 
+	public void SetAllTimeSliders(){
+		for (int i = 0; i < Instruments.Count; i++) {
+			Instruments[i].UseTimeSlider();
+		}//for
+	}//SetAllInstruments
+
 }//MasterInstrument
