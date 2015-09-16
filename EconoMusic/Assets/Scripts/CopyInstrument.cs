@@ -15,11 +15,6 @@ public class CopyInstrument : MonoBehaviour, IDropHandler{
 	//Holds the instrument number of the instrument being pasted to (AAJ)
 	private int pastedInstrument;
 
-	// Use this for initialization
-	void Start(){
-		Debug.Log("Started!");
-	}
-
 	//Returns the first child (AAJ)
 	public GameObject item{
 		
